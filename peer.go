@@ -185,14 +185,14 @@ func (p *Peer) spawnReceiveWorker() {
 				p.onConnErrorCallbacks.RunCallbacks(p.node, errors.Wrap(err, "failed to read message size"))
 			}
 
-			p.Disconnect()
+			p.disconnect(false)
 			continue
 		}
 
 		if size > p.node.maxMessageSize {
 			p.onConnErrorCallbacks.RunCallbacks(p.node, errors.Errorf("exceeded max message size; got size %d", size))
 
-			p.Disconnect()
+			p.disconnect(false)
 			continue
 		}
 
@@ -202,14 +202,14 @@ func (p *Peer) spawnReceiveWorker() {
 		if err != nil {
 			p.onConnErrorCallbacks.RunCallbacks(p.node, errors.Wrap(err, "failed to read remaining message contents"))
 
-			p.Disconnect()
+			p.disconnect(false)
 			continue
 		}
 
 		if seen < int(size) {
 			p.onConnErrorCallbacks.RunCallbacks(p.node, errors.Errorf("only read %d bytes when expected to read %d from peer", seen, size))
 
-			p.Disconnect()
+			p.disconnect(false)
 			continue
 		}
 
@@ -217,7 +217,7 @@ func (p *Peer) spawnReceiveWorker() {
 		if len(errs) > 0 {
 			log.Warn().Errs("errors", errs).Msg("Got errors running BeforeMessageReceived callbacks.")
 
-			p.Disconnect()
+			p.disconnect(false)
 			continue
 		}
 		buf = b.([]byte)
@@ -227,7 +227,7 @@ func (p *Peer) spawnReceiveWorker() {
 		if opcode == OpcodeNil || err != nil {
 			p.onConnErrorCallbacks.RunCallbacks(p.node, errors.Wrap(err, "failed to decode message"))
 
-			p.Disconnect()
+			p.disconnect(false)
 			continue
 		}
 
@@ -239,14 +239,14 @@ func (p *Peer) spawnReceiveWorker() {
 			recv.lock <- struct{}{}
 			<-recv.lock
 		case <-time.After(p.node.receiveMessageTimeout):
-			p.Disconnect()
+			p.disconnect(false)
 			continue
 		}
 
 		if errs := p.afterMessageReceivedCallbacks.RunCallbacks(p.node); len(errs) > 0 {
 			log.Warn().Errs("errors", errs).Msg("Got errors running AfterMessageReceived callbacks.")
 
-			p.Disconnect()
+			p.disconnect(false)
 			continue
 		}
 	}
@@ -509,6 +509,10 @@ func (p *Peer) Receive(o Opcode) <-chan Message {
 }
 
 func (p *Peer) Disconnect() {
+	p.disconnect(true)
+}
+
+func (p *Peer) disconnect(block bool) {
 	if !atomic.CompareAndSwapUint32(&p.killOnce, 0, 1) {
 		return
 	}
@@ -519,15 +523,21 @@ func (p *Peer) Disconnect() {
 	for i := 0; i < 2; i++ {
 		p.kill <- &wg
 	}
-
 	if err := p.conn.Close(); err != nil {
 		p.onConnErrorCallbacks.RunCallbacks(p.node, errors.Wrapf(err, "got errors closing peer connection"))
 	}
 
-	wg.Wait()
-	close(p.kill)
+	f := func() {
+		wg.Wait()
+		p.onDisconnectCallbacks.RunCallbacks(p.node)
+		close(p.kill)
+	}
 
-	p.onDisconnectCallbacks.RunCallbacks(p.node)
+	if block {
+		f()
+	} else {
+		go f()
+	}
 }
 
 func (p *Peer) LocalIP() net.IP {
