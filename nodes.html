@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Nodes - The Noise Book</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="noise.html">noise</a></li><li><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="setup.html"><strong aria-hidden="true">1.1.</strong> Setup</a></li></ol></li><li><a href="nodes.html" class="active"><strong aria-hidden="true">2.</strong> Nodes</a></li><li><ol class="section"><li><a href="messages.html"><strong aria-hidden="true">2.1.</strong> Messages</a></li><li><a href="identities.html"><strong aria-hidden="true">2.2.</strong> Identities</a></li><li><a href="transports.html"><strong aria-hidden="true">2.3.</strong> Transports</a></li><li><a href="nat.html"><strong aria-hidden="true">2.4.</strong> NAT Traversal</a></li></ol></li><li><a href="peers.html"><strong aria-hidden="true">3.</strong> Peers</a></li><li><ol class="section"><li><a href="io.html"><strong aria-hidden="true">3.1.</strong> I/O</a></li></ol></li><li><a href="protocol.html"><strong aria-hidden="true">4.</strong> Protocol</a></li><li><ol class="section"><li><a href="ecdh.html"><strong aria-hidden="true">4.1.</strong> Elliptic Curve Diffie-Hellman Handshake (ECDH)</a></li><li><a href="aead.html"><strong aria-hidden="true">4.2.</strong> Authenticated Encryption w/ Authenticated Data (AEAD)</a></li><li><a href="skademlia.html"><strong aria-hidden="true">4.3.</strong> S/Kademlia</a></li></ol></li><li><a href="callbacks.html"><strong aria-hidden="true">5.</strong> Callbacks</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">The Noise Book</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#nodes" id="nodes"><h1>Nodes</h1></a>
+<p>Nodes are self-explanatory: they are the central hub of any p2p application that listens for peers, accepts incoming connections from peers, and coordinates around alive peer connections.</p>
+<p>You can create multiple nodes within a single application, though most of the time you would most probably just stick to creating one.</p>
+<p>To make management of nodes simple within Noise, all node-level logic/operations are encapsulated and accessible under a single entity: <code>*noise.Node</code>.</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+
+func main() {
+    // Instantiate a default set of node parameters.
+    params := noise.DefaultParams()
+    params.Port = uint16(3000)
+    
+    // Instantiate a new node that listens for peers on port 3000.
+    node, err := noise.NewNode(params)
+    if err != nil {
+        panic(err)
+    }
+    
+    // Start listening for incoming peers.
+    go node.Listen()
+    
+    select{}
+}
+</code></pre>
+<p>Instantiating a <code>*noise.Node</code> is a matter of passing in a set of configuration options, with which we provide to you a nice set of defaults.</p>
+<pre><code class="language-go">func DefaultParams() parameters {
+    return parameters{
+        Host:           &quot;127.0.0.1&quot;,
+        Port: 0
+        Transport:      transport.NewTCP(),
+        Metadata:       map[string]interface{}{},
+        MaxMessageSize: 1048576,
+
+        SendMessageTimeout:    3 * time.Second,
+        ReceiveMessageTimeout: 3 * time.Second,
+
+        SendWorkerBusyTimeout: 3 * time.Second,
+    }
+}
+</code></pre>
+<a class="header" href="#setup" id="setup"><h2>Setup</h2></a>
+<p>Before instantiating a node however, you may optionally change up the configuration options however you want. Noise provides a large array of options you may play around with.</p>
+<pre><code class="language-go">type parameters struct {
+    Host               string
+    Port, ExternalPort uint16
+
+    NAT       nat.Provider
+    Keys      identity.Keypair
+    Transport transport.Layer
+
+    Metadata map[string]interface{}
+
+    MaxMessageSize uint64
+
+    SendMessageTimeout    time.Duration
+    ReceiveMessageTimeout time.Duration
+
+    SendWorkerBusyTimeout time.Duration
+}
+</code></pre>
+<p>As an example, you may forcefully set <code>Host</code> to have your node listen for peers under a specified host address.</p>
+<p>Or you may choose to set the internal port your node listens on by setting <code>Port</code>, or otherwise set an external port which you expect your computer to be able to openly accept connections on by setting <code>ExternalPort</code>.</p>
+<p>By default, should the <code>ExternalPort</code> option not be set, <code>ExternalPort</code> will be set to whatever value <code>Port</code> is on node instantiation.</p>
+<p>Should <code>Port</code> not be specified, depending on the transport layer chosen (at the very least, for TCP), a randomly available port will be assigned to the node upon instantiation.</p>
+<p>The next couple of pages goes over how to configure a couple of the available options above.</p>
+<a class="header" href="#metadata" id="metadata"><h2>Metadata</h2></a>
+<p>Every single <code>*noise.Node</code> instance is capable of holding custom metadata that you choose to pass around throughout your p2p application.</p>
+<p>The exposed functions for manipulating custom metadata is akin to the <code>sync.Map</code> API in Go's standard library.</p>
+<p>Should you share any metadata across multiple goroutines, be sure to use some sync primitives to safely share data around.</p>
+<pre><code class="language-go">// Given a `*noise.Node` instance `node`,
+var node *noise.Node
+
+someValue := node.LoadOrStore(&quot;some key&quot;, uint32(64))
+// `someValue` is an interface{} type that may be safely casted to uint32
+
+queriedValue := node.Get(&quot;some key&quot;)
+// `queriedValue` is an interface{} type that may be safely casted to uint32
+
+fmt.Println(&quot;Must be true:&quot;, someValue == queriedValue)
+
+node.Set(&quot;some key&quot;, true)
+
+fmt.Println(&quot;The value for key `some key` is now:&quot;, node.Get(&quot;some key&quot;))
+
+node.Delete(&quot;some key&quot;)
+
+fmt.Println(&quot;The value for key `some key` is now nil:&quot;, node.Get(&quot;some key&quot;))
+</code></pre>
+<a class="header" href="#cleanup" id="cleanup"><h2>Cleanup</h2></a>
+<p>After you are done with a node, you may gracefully stop a node by invoking the <code>node.Kill()</code> function.</p>
+<p>The function will block the current goroutine until all workers related to a node have been put to a complete stop.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="messages.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="messages.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

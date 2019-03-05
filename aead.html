@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Authenticated Encryption w/ Authenticated Data (AEAD) - The Noise Book</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="noise.html">noise</a></li><li><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="setup.html"><strong aria-hidden="true">1.1.</strong> Setup</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">2.</strong> Nodes</a></li><li><ol class="section"><li><a href="messages.html"><strong aria-hidden="true">2.1.</strong> Messages</a></li><li><a href="identities.html"><strong aria-hidden="true">2.2.</strong> Identities</a></li><li><a href="transports.html"><strong aria-hidden="true">2.3.</strong> Transports</a></li><li><a href="nat.html"><strong aria-hidden="true">2.4.</strong> NAT Traversal</a></li></ol></li><li><a href="peers.html"><strong aria-hidden="true">3.</strong> Peers</a></li><li><ol class="section"><li><a href="io.html"><strong aria-hidden="true">3.1.</strong> I/O</a></li></ol></li><li><a href="protocol.html"><strong aria-hidden="true">4.</strong> Protocol</a></li><li><ol class="section"><li><a href="ecdh.html"><strong aria-hidden="true">4.1.</strong> Elliptic Curve Diffie-Hellman Handshake (ECDH)</a></li><li><a href="aead.html" class="active"><strong aria-hidden="true">4.2.</strong> Authenticated Encryption w/ Authenticated Data (AEAD)</a></li><li><a href="skademlia.html"><strong aria-hidden="true">4.3.</strong> S/Kademlia</a></li></ol></li><li><a href="callbacks.html"><strong aria-hidden="true">5.</strong> Callbacks</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">The Noise Book</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#authenticated-encryption-w-authenticated-data" id="authenticated-encryption-w-authenticated-data"><h1>Authenticated Encryption w/ Authenticated Data</h1></a>
+<p><strong>noise</strong> provides a simple wrapper around Go's de-facto implementation of Authenticated Encryption w/ Authenticated Data (AEAD) as a <code>protocol.Block</code>.</p>
+<p><code>aead</code> relies on a prior block providing an established shared key between two peers which is set within a given peers metadata through a call to <code>protocol.SetSharedKey([]byte)</code>.</p>
+<p>If an established shared key could not be found upon entry to the <code>aead</code> block, the peer will be disconnected.</p>
+<p>The shared key from prior blocks would be passed through a SHA256-based <a href="https://en.wikipedia.org/wiki/HKDF">HKDF</a>, and thereafter used to encrypt/decrypt all future communications amongst a pair of peers.</p>
+<p>Any other hash function may optionally be set to perform key derivation like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/noise/cipher/aead&quot;
+import &quot;crypto/sha256&quot;
+import &quot;crypto/sha512&quot;
+
+block := aead.New().WithHash(sha256.New)
+
+// You may optionally opt out from using the builder pattern like so.
+block.WithHash(sha512.New)
+</code></pre>
+<p>By default, AES-256 GCM (Galois Counter Mode) is used for performing AEAD.</p>
+<p>ChaCha20-Poly1305 and XChaCha20-Poly1305 are also supported, but note that the shared key a peer starts off with must be 256 bits.</p>
+<p>You may set the cipher to use w/ <code>aead</code> like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/noise/cipher/aead&quot;
+import &quot;crypto/cipher&quot;
+
+block := aead.New()
+
+// Set either one of the 3 cipher suites below to use with the `aead` block.
+aes256_GCM := aead.AES256_GCM
+chacha20_poly1305 := aead.ChaCha20_Poly1305
+xchacha20_poly1305 := aead.XChaCha20_Poly1305
+
+// Or in general, any function of the following format.
+customCipher := func(sharedKey []byte) (cipher.AEAD, error) {
+    // ... setup your cipher here given a HMAC-derived shared key
+}
+
+block.WithSuite(aes256_GCM)
+</code></pre>
+<a class="header" href="#protocol" id="protocol"><h2>Protocol</h2></a>
+<p>An <code>ACK</code> message is sent between two peers, and received using the atomic locking operation <code>peer.LockOnReceive(opcodeACK)</code> to establish a synchronization point where from a specific time onwards, all messages will be encrypted/decrypted using AEAD.</p>
+<p>Timeouts for expecting to receive the <code>ACK</code> message can be easily set like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/noise/cipher/aead&quot;
+import &quot;time&quot;
+
+block := aead.New().WithACKTimeout(3 * time.Second)
+
+// You may optionally opt out from using the builder pattern like so.
+block.WithACKTimeout(5 * time.Second)
+</code></pre>
+<p>Given that Noise guarantees linearized message delivery which is dependant on the transport layer used, we associate incremental nonces rather than random nonces for establishing authenticated encryption.</p>
+<p>Incremental nonces simply imply that on every message received, we increment our nonce and attempt to decrypt the received message with the new nonce. The same applies for whenever we sent a message.</p>
+<p>The code associated with handling incremental nonces is like so:</p>
+<pre><code class="language-go">import &quot;crypto/cipher&quot;
+import &quot;atomic&quot;
+import &quot;binary&quot;
+
+// ...
+// Perform ACK handling and locking to establish synchronization point here.
+// ...
+
+var ourNonce uint64
+var theirNonce uint64
+var suite cipher.AEAD
+
+peer.BeforeMessageReceived(func(node *noise.Node, peer *noise.Peer, msg []byte) (buf []byte, err error) {
+    theirNonceBuf := make([]byte, suite.NonceSize())
+    binary.LittleEndian.PutUint64(theirNonceBuf, atomic.AddUint64(&amp;theirNonce, 1))
+
+    return suite.Open(msg[:0], theirNonceBuf, msg, nil)
+})
+
+peer.BeforeMessageSent(func(node *noise.Node, peer *noise.Peer, msg []byte) (buf []byte, err error) {
+    ourNonceBuf := make([]byte, suite.NonceSize())
+    binary.LittleEndian.PutUint64(ourNonceBuf, atomic.AddUint64(&amp;ourNonce, 1))
+
+    return suite.Seal(msg[:0], ourNonceBuf, msg, nil), nil
+})
+</code></pre>
+<p>A helpful function that you may choose to use throughout your application is <code>aead.WaitUntilAuthenticated(*noise.Peer)</code>
+which blocks the current goroutine until a peer we specify has successfully setup AEAD encryption/decryption for all incoming/outgoing messages.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="ecdh.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="skademlia.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="ecdh.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="skademlia.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

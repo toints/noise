@@ -1,0 +1,325 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Peers - The Noise Book</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="noise.html">noise</a></li><li><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="setup.html"><strong aria-hidden="true">1.1.</strong> Setup</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">2.</strong> Nodes</a></li><li><ol class="section"><li><a href="messages.html"><strong aria-hidden="true">2.1.</strong> Messages</a></li><li><a href="identities.html"><strong aria-hidden="true">2.2.</strong> Identities</a></li><li><a href="transports.html"><strong aria-hidden="true">2.3.</strong> Transports</a></li><li><a href="nat.html"><strong aria-hidden="true">2.4.</strong> NAT Traversal</a></li></ol></li><li><a href="peers.html" class="active"><strong aria-hidden="true">3.</strong> Peers</a></li><li><ol class="section"><li><a href="io.html"><strong aria-hidden="true">3.1.</strong> I/O</a></li></ol></li><li><a href="protocol.html"><strong aria-hidden="true">4.</strong> Protocol</a></li><li><ol class="section"><li><a href="ecdh.html"><strong aria-hidden="true">4.1.</strong> Elliptic Curve Diffie-Hellman Handshake (ECDH)</a></li><li><a href="aead.html"><strong aria-hidden="true">4.2.</strong> Authenticated Encryption w/ Authenticated Data (AEAD)</a></li><li><a href="skademlia.html"><strong aria-hidden="true">4.3.</strong> S/Kademlia</a></li></ol></li><li><a href="callbacks.html"><strong aria-hidden="true">5.</strong> Callbacks</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">The Noise Book</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#peers" id="peers"><h1>Peers</h1></a>
+<p>Nodes in <strong>noise</strong> come with the ability to be able to dial and connect to other peers.</p>
+<p>After taking some time to configure and instantiate your node, you can dial/connect to a peer like so:</p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;github.com/perlin-network/noise&quot;
+)
+
+func main() {
+    params := noise.DefaultParams()
+    params.Port = uint16(3000)
+    
+    node, err := noise.NewNode(params)
+    if err != nil {
+        panic(err)
+    }
+    
+    // Start listening for incoming peers.
+    go node.Listen()
+    
+    // Dial peer at address 127.0.0.1:3001.
+    peer, err := node.Dial(&quot;127.0.0.1:3001&quot;)
+    if err != nil {
+        panic(&quot;failed to dial peer located at 127.0.0.1:3001!&quot;)
+    }
+    
+    // ... do whatever you want with `peer` here.
+    
+    select{}
+}
+</code></pre>
+<p>The node function <code>Dial(addres string)</code> returns an instance of <code>*noise.Peer</code> which provides you a large number of convenience functions for interacting/dealing with a peer.</p>
+<p>An error will return should there be issues connecting/dialing a peer.</p>
+<blockquote>
+<p><strong>Note:</strong> You may have multiple <code>*noise.Peer</code> instances connected to the exact same computer/address. They are unique amongst one another, and simply represent but a single connection instance to a computer.</p>
+</blockquote>
+<p>The next page will go over briefly how to send/receive message given a <code>*noise.Peer</code> instance.</p>
+<a class="header" href="#intercepting-events" id="intercepting-events"><h2>Intercepting Events</h2></a>
+<p>Every single time a peer connects to your node, or a connection is successfully established against a peer, you may pass to a <code>*noise.Node</code> instance a callback function to execute.</p>
+<pre><code class="language-go">var node *noise.Node
+
+node.OnPeerConnected(func(node *noise.Node, peer *noise.Peer) error {
+    // This function gets called every time a peer connects
+    // to you!
+    return nil
+})
+
+node.OnPeerDialed(func(node *noise.Node, peer *noise.Peer) error {
+    // This function gets called every time you successfully
+    // connect to a peer!
+    return nil
+})
+
+node.OnPeerInit(func(node *noise.Node, peer *noise.Peer) error {
+    // This function gets called every time a peer connects
+    // to you, or you successfully connect to a peer!
+    return nil
+})
+</code></pre>
+<p>Just like every other callback function passed to Noise, be sure that no blocking (ex: infinite loop) occurs in any callback function or else Noise will deadlock.</p>
+<p>Some reasons for why you would want to intercept any of these events include:</p>
+<ol>
+<li>instantiating metadata for your peer,</li>
+<li>spawning new worker goroutines that run in parallel with every single peer,</li>
+<li>and sending/receiving messages upon successful instantiation of a <code>*noise.Peer</code>.</li>
+</ol>
+<a class="header" href="#metadata" id="metadata"><h2>Metadata</h2></a>
+<p>Every single <code>*noise.Peer</code> instance is capable of holding custom metadata that you choose to pass around throughout your p2p application.</p>
+<p>The exposed functions for manipulating custom metadata is akin to the <code>sync.Map</code> API in Go's standard library.</p>
+<p>Should you share any metadata across multiple goroutines, be sure to use some sync primitives to safely share data around.</p>
+<pre><code class="language-go">// Given a `*noise.Peer` instance `peer`,
+var peer *noise.Peer
+
+someValue := peer.LoadOrStore(&quot;some key&quot;, uint32(64))
+// `someValue` is an interface{} type that may be safely casted to uint32
+
+queriedValue := peer.Get(&quot;some key&quot;)
+// `queriedValue` is an interface{} type that may be safely casted to uint32
+
+fmt.Println(&quot;Must be true:&quot;, someValue == queriedValue)
+
+peer.Set(&quot;some key&quot;, true)
+
+fmt.Println(&quot;The value for key `some key` is now:&quot;, peer.Get(&quot;some key&quot;))
+
+peer.Delete(&quot;some key&quot;)
+
+fmt.Println(&quot;The value for key `some key` is now nil:&quot;, peer.Get(&quot;some key&quot;))
+</code></pre>
+<a class="header" href="#cleanup" id="cleanup"><h2>Cleanup</h2></a>
+<p>After you are done with a peer, you may gracefully stop the peer by invoking the <code>peer.Disconnect()</code> function.</p>
+<p>The function will block the current goroutine until all workers related to a peer have been put to a complete stop.</p>
+<p>You may additionally specify a callback function to be called when a specified peer disconnects to cleanup any resources/variables left behind of a peer.</p>
+<pre><code class="language-go">var peer *noise.Peer
+
+peer.OnDisconnect(func(node *noise.Node, peer *noise.Peer) error {
+    // handle disconnect logic here...
+    return nil
+})
+
+// We can also have a disconnect callback registered on every single peer.
+var node *noise.Node
+
+node.OnPeerDisconnected(func(node *noise.Node, peer *noise.Peer) error {
+    // handle disconnect logic here...
+    return nil
+})
+
+// The above is just syntactical sugar for the following code.
+node.OnPeerInit(func(node *noise.Node, peer *noise.Peer) error {
+    peer.OnDisconnect(func(node *noise.Node, peer *noise.peer) error {
+        // handle disconnect logic here..
+        return nil
+    })
+    
+    return nil
+})
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="nat.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="io.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="nat.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="io.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

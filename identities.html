@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Identities - The Noise Book</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="noise.html">noise</a></li><li><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="setup.html"><strong aria-hidden="true">1.1.</strong> Setup</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">2.</strong> Nodes</a></li><li><ol class="section"><li><a href="messages.html"><strong aria-hidden="true">2.1.</strong> Messages</a></li><li><a href="identities.html" class="active"><strong aria-hidden="true">2.2.</strong> Identities</a></li><li><a href="transports.html"><strong aria-hidden="true">2.3.</strong> Transports</a></li><li><a href="nat.html"><strong aria-hidden="true">2.4.</strong> NAT Traversal</a></li></ol></li><li><a href="peers.html"><strong aria-hidden="true">3.</strong> Peers</a></li><li><ol class="section"><li><a href="io.html"><strong aria-hidden="true">3.1.</strong> I/O</a></li></ol></li><li><a href="protocol.html"><strong aria-hidden="true">4.</strong> Protocol</a></li><li><ol class="section"><li><a href="ecdh.html"><strong aria-hidden="true">4.1.</strong> Elliptic Curve Diffie-Hellman Handshake (ECDH)</a></li><li><a href="aead.html"><strong aria-hidden="true">4.2.</strong> Authenticated Encryption w/ Authenticated Data (AEAD)</a></li><li><a href="skademlia.html"><strong aria-hidden="true">4.3.</strong> S/Kademlia</a></li></ol></li><li><a href="callbacks.html"><strong aria-hidden="true">5.</strong> Callbacks</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">The Noise Book</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#identities" id="identities"><h1>Identities</h1></a>
+<p>Apart from your nodes external IP and port, p2p applications typically instill that each node should have some sort of publicly verifiable identity.</p>
+<p>The identity could comprise of all sorts of things: from a string of random bytes to a cryptographically verifiable identity.</p>
+<p>Most likely, you would want a cryptographic ID for your node.</p>
+<p>As of right now, there exists a few identity schemes which Noise provides built-in support for that you may use on the get-go for your p2p application:</p>
+<ol>
+<li>Ed25519 identities</li>
+<li>S/Kademlia-compatible Ed25519 identities</li>
+</ol>
+<p>You may additionally create/implement your own identity schemes that any node/peer may support in Noise by simply having your scheme implement the following interface:</p>
+<pre><code class="language-go">package identity
+
+import &quot;fmt&quot;
+
+type Keypair interface {
+    fmt.Stringer
+
+    ID() []byte
+    PublicKey() []byte
+    PrivateKey() []byte
+}
+</code></pre>
+<p>Should the identity scheme you wish to implement not have any sort of <code>PrivateKey()</code> or <code>PublicKey()</code> or <code>ID()</code> associated to it, you may simply stub out those functions and ignore their implementation.</p>
+<p>After picking/implementing an identity scheme of your choice for your p2p application, it is simple to have your node adopt it as follows:</p>
+<pre><code class="language-go">import (
+    &quot;github.com/perlin-network/noise&quot;
+    &quot;github.com/perlin-network/noise/identity/ed25519&quot;
+    &quot;github.com/perlin-network/noise/skademlia&quot;
+)
+
+params := noise.DefaultParams()
+
+// Generate a random Ed25519 keypair w/ EdDSA signature scheme support
+// for your node.
+params.Keys = ed25519.RandomKeys()
+
+// Generate a random S/Kademlia-compatible Ed25519 keypair w/ EdDSA 
+// signature scheme support for your node.
+params.Keys = skademlia.RandomKeys()
+
+// Load an existing Ed25519 keypair for your node.
+params.Keys = ed25519.LoadKeys([]byte{...})
+
+// Load an existing S/Kademlia-compatible keypair for your node.
+// Wondering what C1 and C2 are for? Check out S/Kademlia's documentation!
+params.Keys = skademlia.LoadKeys([]byte{...}, skademlia.DefaultC1, skademlia.DefaultC2)
+</code></pre>
+<a class="header" href="#signingverifying-messages" id="signingverifying-messages"><h2>Signing/Verifying Messages</h2></a>
+<p>Signature schemes are stubbed out into an interface which you could implement to integrate
+cryptographic signatures into supported protocol building blocks Noise provides.</p>
+<p>All signature schemes implement the following interface:</p>
+<pre><code class="language-go">type Scheme interface {
+    Sign(privateKey, messageBuf []byte) ([]byte, error)
+    Verify(publicKeyBuf, messageBuf, signatureBuf []byte) error
+}
+</code></pre>
+<p>As of right now, Noise provides off-the-shelf the following signature schemes:</p>
+<ul>
+<li>EdDSA Signature Scheme (assembly-optimized)</li>
+</ul>
+<p>You may use a signature scheme to sign/verify raw arrays of bytes to see
+whether or not a signature was generated by a specified public key like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise/signature/eddsa&quot;
+
+var node *noise.Node
+
+message := &quot;We're going to sign this message with our node!&quot;
+
+// Sign a message using the EdDSA signature scheme.
+signature, err := eddsa.Sign(node.Keys.PrivateKey(), []byte(message))
+if err != nil {
+    panic(&quot;failed to sign the message&quot;)
+}
+
+fmt.Println(&quot;Signature:&quot;, signature)
+
+// Now let's verify that the signature is under our own nodes identity!
+
+fmt.Println(&quot;Is the signature valid?&quot;, 
+    eddsa.Verify(node.Keys.PublicKey(), []byte(message), signature))
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="messages.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="transports.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="messages.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="transports.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

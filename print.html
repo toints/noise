@@ -1,0 +1,1762 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Noise Book</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="noise.html">noise</a></li><li><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="setup.html"><strong aria-hidden="true">1.1.</strong> Setup</a></li></ol></li><li><a href="nodes.html"><strong aria-hidden="true">2.</strong> Nodes</a></li><li><ol class="section"><li><a href="messages.html"><strong aria-hidden="true">2.1.</strong> Messages</a></li><li><a href="identities.html"><strong aria-hidden="true">2.2.</strong> Identities</a></li><li><a href="transports.html"><strong aria-hidden="true">2.3.</strong> Transports</a></li><li><a href="nat.html"><strong aria-hidden="true">2.4.</strong> NAT Traversal</a></li></ol></li><li><a href="peers.html"><strong aria-hidden="true">3.</strong> Peers</a></li><li><ol class="section"><li><a href="io.html"><strong aria-hidden="true">3.1.</strong> I/O</a></li></ol></li><li><a href="protocol.html"><strong aria-hidden="true">4.</strong> Protocol</a></li><li><ol class="section"><li><a href="ecdh.html"><strong aria-hidden="true">4.1.</strong> Elliptic Curve Diffie-Hellman Handshake (ECDH)</a></li><li><a href="aead.html"><strong aria-hidden="true">4.2.</strong> Authenticated Encryption w/ Authenticated Data (AEAD)</a></li><li><a href="skademlia.html"><strong aria-hidden="true">4.3.</strong> S/Kademlia</a></li></ol></li><li><a href="callbacks.html"><strong aria-hidden="true">5.</strong> Callbacks</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">The Noise Book</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#noise" id="noise"><h1>noise</h1></a>
+<p><strong>noise</strong> is a peer-to-peer (p2p) networking stack with minimal dependencies which allows for extreme granularity in defining, testing, developing and deploying complex, secure, performant, and robust networking protocols in <a href="https://golang.org">Go</a> written by <a href="https://perlin.net">the Perlin team</a>.</p>
+<p>By itself, noise is a low-level, stateless, concurrent networking library that easily allows you to incorporate fundamental features any modern p2p application needs such as:</p>
+<ol>
+<li>cryptographic primitives (Ed25519, PoW, AES-256),</li>
+<li>message serialization/deserialization schemes (byte-order little endian, protobuf, msgpack),</li>
+<li>network timeout/error management (on dial, on receive message, on send buffer full),</li>
+<li>network-level atomic operations (receive-then-lock),</li>
+<li>and NAT traversal support (NAT-PMP, UPnP).</li>
+</ol>
+<p>Out of its own low-level constructs, noise additionally comes bundled with a high-level <code>protocol</code> package comprised of a large number of production-ready, high-level protocol building blocks such as:</p>
+<ol>
+<li>handshake protocol implementations (Elliptic-Curve Diffie Hellman),</li>
+<li>peer routing/discovery protocol implementations (S/Kademlia),</li>
+<li>message broadcasting protocol implementations (S/Kademlia),</li>
+<li>overlay network protocol implementations (S/Kademlia),</li>
+<li>cryptographic identity schemes (Ed25519 w/ EdDSA signatures),</li>
+<li>and authenticated encryption schemes (AES-256 GCM AEAD).</li>
+</ol>
+<p>Every single building block is easily configurable, and may be mixed and matched together to help you kickstart your journey on developing secure, debuggable, and highly-performant p2p applications.</p>
+<blockquote>
+<p><strong>noise</strong> is truly open-source and free. You can find the source code on <a href="https://github.com/perlin-network/noise">GitHub</a>. Issues and feature requests can be posted on the <a href="https://github.com/perlin-network/noise/issues">GitHub issue tracker</a>.</p>
+</blockquote>
+<pre><code class="language-go">package main
+
+import (
+    &quot;fmt&quot;
+    
+    &quot;github.com/perlin-network/noise&quot;
+    &quot;github.com/perlin-network/noise/cipher/aead&quot;
+    &quot;github.com/perlin-network/noise/handshake/ecdh&quot;
+    &quot;github.com/perlin-network/noise/identity/ed25519&quot;
+    &quot;github.com/perlin-network/noise/protocol&quot;
+    &quot;github.com/perlin-network/noise/rpc&quot;
+    &quot;github.com/perlin-network/noise/skademlia&quot;
+)
+
+func main() {
+    params := noise.DefaultParams()
+    params.Keys = ed25519.Random()
+    params.Port = uint16(3000)
+    
+    node, err := noise.NewNode(params)
+    if err != nil {
+        panic(err)
+    }
+    
+    protocol.New().
+        Register(ecdh.New()).
+        Register(aead.New()).
+        Register(skademlia.New()).
+        Enforce(node)
+    
+    fmt.Printf(&quot;Listening for peers on port %d.\n&quot;, node.ExternalPort())
+    
+    go node.Listen()
+    
+    select{}
+}
+</code></pre>
+<a class="header" href="#were-hiring" id="were-hiring"><h2>We're hiring!</h2></a>
+<p>Here at <a href="https://perlin.net">Perlin</a>, we spend days and weeks debating, tinkering, and researching what is out there in academia to bring to industries truly resilient, open-source, secure, economic, and decentralized software to empower companies, startups, and users.</p>
+<p>Our doors are open to academics that have a knack for distributed systems, engineers that want to explore unknown waters, frontend developers that want to make and evangelize the next generation of customer-facing applications, and graphics designers that yearn to instrument together greater user experiences for decentralized applications.</p>
+<a class="header" href="#contributions" id="contributions"><h2>Contributions</h2></a>
+<p>First of all, <em>thank you so much</em> for taking part in our efforts for creating a p2p networking stack that can meet everyones needs without sacrificing developer productivity!</p>
+<p>All code contributions to <em>noise</em> should comply with all idiomatic Go standards listed <a href="https://github.com/golang/go/wiki/CodeReviewComments">here</a>.</p>
+<p>All commit messages should be in the format:</p>
+<pre><code class="language-bash">module_name_1, module_name_2: description of the changes you made to the two
+    modules here as a sentence
+</code></pre>
+<p>Be sure to use only imperative, present tense within your commit messages and optionally include motivation for your changes <em>two lines breaks</em> away from your commit message.</p>
+<p>This allows other maintainers and contributors to know which modules you are modifying/creating within the code/docs repository.</p>
+<p>Lastly, be sure to consider backwards compatibility.</p>
+<p>New modules/methods are perfectly fine, but changing code living in <code>noise.Node</code> or <code>noise.Peer</code> radically for example would break a lot of existing projects utilizing <em>noise</em>.</p>
+<p>Additionally, if you'd like to talk to us or any of the team in real-time, be sure to join our <a href="https://discord.gg/dMYfDPM">Discord server</a>!</p>
+<p>We are heavily active, ready to answer any questions/assist you with any code/doc contributions at almost any time.</p>
+<a class="header" href="#license" id="license"><h2>License</h2></a>
+<p><strong>noise</strong>, and all of its source code is released under the MIT <a href="https://github.com/perlin-network/noise/blob/master/LICENSE">License</a>.</p>
+<a class="header" href="#introduction" id="introduction"><h1>Introduction</h1></a>
+<p>Peer-to-peer (P2P) networking is something that is just <em>damn hard</em> to get right.</p>
+<p>The thing is, there has been no standardized solution to developing P2P applications that has been widely adopted by any community; with prior open-sourced attempts seeming like some mangled code pulled out of a poor magicians hat.</p>
+<p>As a result, we see a lot of projects going for improper P2P networking solutions such as:</p>
+<ul>
+<li><strong>gRPC</strong>, which was intended to be used for micro-services. <strong>NOT</strong> as a networking stack for trustless P2P applications.</li>
+<li><strong>Consul, Etcd, and even ZooKeeper,</strong> which was intended to be used for service discovery in a <em>trusted, centralized network</em>.</li>
+</ul>
+<p>And on the other hand, we see hodgepodges of code such as:</p>
+<ul>
+<li><strong>libp2p,</strong> which feels oddly modular and far too verbose in all the wrong ways as though it was ripped out of IPFS.</li>
+</ul>
+<p>In response, we now have a wide array of projects in the decentralized space, rolling out with their own immature networking stacks that are festered with bugs and low-level detail that is making the development of decentralized apps/cryptographic protocols just a huge conglomerated mess.</p>
+<a class="header" href="#what-is-noise" id="what-is-noise"><h2>What is <code>noise</code>?</h2></a>
+<p><strong>noise</strong> was born out of the frustration that networking libraries typically trade off developer productivity in exchange for performance, security, and expressivity.</p>
+<p>It is difficult to bring along a clear separation between a p2p applications networking protocol, and the underlying networking boilerplate code that comes with it.</p>
+<p>As a result, the final product after months of work invested into building a p2p application is that its source code inevitably becomes garbled, hard-to-debug, and incredibly unintuitive to the eyes of any developer.</p>
+<p>At <a href="https://perlin.net">Perlin</a>, we have faced this exact same issue time and time again building mission-critical p2p applications.</p>
+<p>There does not exist a networking library out right now that has the capability of cleanly allowing a developer to declaratively implement complex, abstract networking protocols which p2p applications inevitably comprise of.</p>
+<p>Libraries/frameworks that claim otherwise tend to abstract away the low-level networking details that a p2p application must absolutely have control of.</p>
+<p>This led us to building and open-sourcing noise: a networking stack that lets you declaratively derive complex structure out of a noisy network of nodes.</p>
+<p>In developing Noise, our goals are three-fold:</p>
+<ul>
+<li>
+<p><strong>Developer Ergonomics.</strong> Developers should never feel forced to read from and write with, an ugly code mess tied to thousands of unnecessary dependencies with abhorrent documentation while writing secure, high-performance, and low-latency networking systems.</p>
+<p>Thousands of decentralized projects produce insightful, yet highly non-reusable code selfishly stuck to the abstractions of their own projects code-base for the sake of showing off their own coding prowess.</p>
+</li>
+<li>
+<p><strong>Don’t-Repeat-Yourself (DRY).</strong> When dealing with security and performance, Noise is opinionated in having developers work with friendly and concise abstractions over battle-tested, high performance, and secure technologies such as Ed25519 signatures, TCP, zerolog, and protobufs.</p>
+<p>Tons of decentralized projects roll out their own custom bug-prone wire serialization formats, networking protocols, cryptosystems and signature schemes which only makes the learning curve for developers more tedious in taking apart/contributing to such projects.</p>
+</li>
+<li>
+<p><strong>Keep-It-Simple-Stupid (KISS).</strong> Developers should feel comfortable in diving through Noise’s code-base, writing decentralized applications with a minimal amount of boilerplate while being backed by sufficient amounts of examples.</p>
+<p>Developers should not have to write 200 lines of code while digging through crappy documentation for the sake of writing a hello world application.</p>
+</li>
+</ul>
+<p>After iterating through hundreds of improvement and requests, we hope you enjoy using <strong>noise</strong> for your next p2p application.</p>
+<p>— The Perlin Team</p>
+<a class="header" href="#setup" id="setup"><h1>Setup</h1></a>
+<p>Make sure to have at the bare minimum <a href="https://golang.org/dl/">Go 1.11</a> installed before incorporating <strong>noise</strong> into your project.</p>
+<p>After installing <em>Go</em>, you may choose to either:</p>
+<ol>
+<li>directly incorporate noise as a library dependency to your project,</li>
+</ol>
+<pre><code class="language-bash"># Be sure to have Go modules enabled: https://github.com/golang/go/wiki/Modules
+export GO111MODULE=on
+
+# Run this inside your projects directory.
+go get github.com/perlin-network/noise
+</code></pre>
+<ol start="2">
+<li>or checkout the source code on Github and run any of the following commands below.</li>
+</ol>
+<pre><code class="language-bash"># Be sure to have Go modules enabled: https://github.com/golang/go/wiki/Modules
+export GO111MODULE=on
+
+# Run an example creating a cluster of 3 peers automatically
+# discovering one another.
+[terminal 1] go run examples/chat/main.go -p 3000
+[terminal 2] go run examples/chat/main.go -p 3001 127.0.0.1:3000
+[terminal 3] go run examples/chat/main.go -p 3002 127.0.0.1:3001
+
+# Optionally run test cases.
+go test -v -count=1 -race ./...
+</code></pre>
+<a class="header" href="#nodes" id="nodes"><h1>Nodes</h1></a>
+<p>Nodes are self-explanatory: they are the central hub of any p2p application that listens for peers, accepts incoming connections from peers, and coordinates around alive peer connections.</p>
+<p>You can create multiple nodes within a single application, though most of the time you would most probably just stick to creating one.</p>
+<p>To make management of nodes simple within Noise, all node-level logic/operations are encapsulated and accessible under a single entity: <code>*noise.Node</code>.</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+
+func main() {
+    // Instantiate a default set of node parameters.
+    params := noise.DefaultParams()
+    params.Port = uint16(3000)
+    
+    // Instantiate a new node that listens for peers on port 3000.
+    node, err := noise.NewNode(params)
+    if err != nil {
+        panic(err)
+    }
+    
+    // Start listening for incoming peers.
+    go node.Listen()
+    
+    select{}
+}
+</code></pre>
+<p>Instantiating a <code>*noise.Node</code> is a matter of passing in a set of configuration options, with which we provide to you a nice set of defaults.</p>
+<pre><code class="language-go">func DefaultParams() parameters {
+    return parameters{
+        Host:           &quot;127.0.0.1&quot;,
+        Port: 0
+        Transport:      transport.NewTCP(),
+        Metadata:       map[string]interface{}{},
+        MaxMessageSize: 1048576,
+
+        SendMessageTimeout:    3 * time.Second,
+        ReceiveMessageTimeout: 3 * time.Second,
+
+        SendWorkerBusyTimeout: 3 * time.Second,
+    }
+}
+</code></pre>
+<a class="header" href="#setup-1" id="setup-1"><h2>Setup</h2></a>
+<p>Before instantiating a node however, you may optionally change up the configuration options however you want. Noise provides a large array of options you may play around with.</p>
+<pre><code class="language-go">type parameters struct {
+    Host               string
+    Port, ExternalPort uint16
+
+    NAT       nat.Provider
+    Keys      identity.Keypair
+    Transport transport.Layer
+
+    Metadata map[string]interface{}
+
+    MaxMessageSize uint64
+
+    SendMessageTimeout    time.Duration
+    ReceiveMessageTimeout time.Duration
+
+    SendWorkerBusyTimeout time.Duration
+}
+</code></pre>
+<p>As an example, you may forcefully set <code>Host</code> to have your node listen for peers under a specified host address.</p>
+<p>Or you may choose to set the internal port your node listens on by setting <code>Port</code>, or otherwise set an external port which you expect your computer to be able to openly accept connections on by setting <code>ExternalPort</code>.</p>
+<p>By default, should the <code>ExternalPort</code> option not be set, <code>ExternalPort</code> will be set to whatever value <code>Port</code> is on node instantiation.</p>
+<p>Should <code>Port</code> not be specified, depending on the transport layer chosen (at the very least, for TCP), a randomly available port will be assigned to the node upon instantiation.</p>
+<p>The next couple of pages goes over how to configure a couple of the available options above.</p>
+<a class="header" href="#metadata" id="metadata"><h2>Metadata</h2></a>
+<p>Every single <code>*noise.Node</code> instance is capable of holding custom metadata that you choose to pass around throughout your p2p application.</p>
+<p>The exposed functions for manipulating custom metadata is akin to the <code>sync.Map</code> API in Go's standard library.</p>
+<p>Should you share any metadata across multiple goroutines, be sure to use some sync primitives to safely share data around.</p>
+<pre><code class="language-go">// Given a `*noise.Node` instance `node`,
+var node *noise.Node
+
+someValue := node.LoadOrStore(&quot;some key&quot;, uint32(64))
+// `someValue` is an interface{} type that may be safely casted to uint32
+
+queriedValue := node.Get(&quot;some key&quot;)
+// `queriedValue` is an interface{} type that may be safely casted to uint32
+
+fmt.Println(&quot;Must be true:&quot;, someValue == queriedValue)
+
+node.Set(&quot;some key&quot;, true)
+
+fmt.Println(&quot;The value for key `some key` is now:&quot;, node.Get(&quot;some key&quot;))
+
+node.Delete(&quot;some key&quot;)
+
+fmt.Println(&quot;The value for key `some key` is now nil:&quot;, node.Get(&quot;some key&quot;))
+</code></pre>
+<a class="header" href="#cleanup" id="cleanup"><h2>Cleanup</h2></a>
+<p>After you are done with a node, you may gracefully stop a node by invoking the <code>node.Kill()</code> function.</p>
+<p>The function will block the current goroutine until all workers related to a node have been put to a complete stop.</p>
+<a class="header" href="#messages" id="messages"><h1>Messages</h1></a>
+<p><strong>noise</strong> provides first-class support for choosing how you want message to be serialized/deserialized as they are sent/received over the network.</p>
+<p>You can choose to cryptographically encrypt/decrypt every single message, append cryptographic signatures to every single message in its footer, or even compress/decompress every single message; the possibilities are endless.</p>
+<a class="header" href="#setup-2" id="setup-2"><h2>Setup</h2></a>
+<p>A message at the bare minimum comprises of two components: an opcode, and its contents.</p>
+<p>The <code>opcode</code> is a single unsigned byte that designates what a message contents (its string of bytes) really mean to your application. Think of it like a static type system where you may have in total \( 2^8 \) kinds of types.</p>
+<p>The <code>opcode &lt;-&gt; message</code> pairing may be specified entirely up to the user in code like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+
+var _ noise.Message = (*RandomMessage)(nil)
+
+type RandomMessage struct{}
+
+func (RandomMessage) Read(reader payload.Reader) (noise.Message, error) {
+    return RandomMessage{}, nil
+}
+
+func (RandomMessage) Write() []byte {
+    return []byte(&quot;This is the message contents of a single message!&quot;)
+}
+
+// Register type `RandomMessage` to opcode 16.
+noise.RegisterMessage(noise.Opcode(16), (*RandomMessage)(nil))
+</code></pre>
+<p>One thing that can be taken away by the code above is that messages in Noise implement the interface <code>noise.Message</code>.</p>
+<pre><code class="language-go">// To have Noise send/receive messages of a given type, said type must implement the
+// following Message interface.
+//
+// Noise by default encodes messages as bytes in little-endian order, and provides
+// utility classes to assist with serializing/deserializing arbitrary Go types into
+// bytes efficiently.
+//
+// By exposing raw network packets as bytes to users, any additional form of
+// serialization or message packing or compression scheme or cipher scheme may
+// be bootstrapped on top of any particular message type registered to Noise.
+type Message interface {
+    Read(reader payload.Reader) (Message, error)
+    Write() []byte
+}
+</code></pre>
+<p>Another little tidbit that can be taken away by the code above is that you register said mappings using the <code>noise.Register(opcode noise.Opcode, messageType noise.Message)</code> function, with <code>messageType</code> in this case being a nil pointer of your message.</p>
+<p>Should you attempt to send a message that is not registered, your application will panic as a safety precaution.</p>
+<p>If a peer sends you a message that is not registered, said peer will be automatically disconnected away from you as a safety precaution.</p>
+<p>If you believe something strange might be occuring with how opcodes are being mapped to message types, you can print them out easily by calling <code>noise.DebugOpcodes()</code> at any time.</p>
+<a class="header" href="#next-available-opcode" id="next-available-opcode"><h2>Next Available Opcode</h2></a>
+<p>For convenience, there exists a <code>noise.NextAvailableOpcode()</code> function that provides you an opcode that has yet to be registered to Noise.</p>
+<p>You may use it like so:</p>
+<pre><code class="language-go">// Register type `RandomMessage` to the next available opcode.
+noise.RegisterMessage(noise.NextAvailableOpcode(), (*RandomMessage)(nil))
+</code></pre>
+<p>For the most part by the way, it is highly recommend you only register opcodes upon initialization of your node.</p>
+<p>Doing it while a node is live in your application can potentially cause strange sorts of data races, so it is highly recommended you don't play around with opcode to message type pairings in realtime!</p>
+<a class="header" href="#message-to-opcode-conversion" id="message-to-opcode-conversion"><h2>Message to Opcode Conversion</h2></a>
+<p>After registering your <code>opcode &lt;-&gt; message</code> pairing to Noise, you can use a couple of helper functions to derive the opcode of a given message type, and vice versa.</p>
+<pre><code class="language-go">import &quot;fmt&quot;
+
+message := RandomMessage{}
+
+// Get the opcode of your message.
+opcode, err := noise.OpcodeFromMessage(message)
+if err != nil {
+    panic(&quot;message not registered to noise&quot;)
+}
+
+// The statement above and below are equivalent!
+opcode, err = noise.OpcodeFromMessage((*RandomMessage)(nil))
+if err != nil {
+    panic(&quot;message not registered to noise&quot;)
+}
+
+// Print out the opcode of type `RandomMessage`.
+fmt.Println(&quot;The opcode of `RandomMessage` is:&quot;, opcode)
+
+// And vice-versa.
+messageType, err := noise.MessageFromOpcode(opcode)
+if err != nil {
+    panic(&quot;message not registered to noise&quot;)
+}
+
+fmt.Println(&quot;The message type associated to opcode&quot;, opcode, &quot;is:&quot;, messageType)
+</code></pre>
+<p>These mappings are what Noise relies on to be able to distinguish what kinds of message are being sent/received over the wire.</p>
+<a class="header" href="#serializationdeserialization" id="serializationdeserialization"><h2>Serialization/Deserialization</h2></a>
+<p>Up to 97% of the contents of every single network packet emitted by your node over the wire can be completely customized.</p>
+<p>You could choose to represent all messages as byte-order little-endian messages, or even make use of <code>protobuf</code> or <code>msgpack</code> as your p2p applications message serialization/deserialization format.</p>
+<p>The only limitation which Noise has in terms of configuring how messages look over the wire is that the <code>opcode</code> byte (<em>yes, a single unsigned 8-bit integer</em>), and your messages <code>content</code> (<em>a string of bytes</em>) have to be contiguously next to teach other.</p>
+<p>To put it more visually, a message's payload is well-defined as:</p>
+<a class="header" href="#message-format" id="message-format"><h3>Message Format</h3></a>
+<pre><code class="language-bash">[.. message header ..]
+.
+[.. START PAYLOAD SECTION ..]
+[opcode (unsigned 8-bit integer)]
+[contents ([]byte)]
+[.. END PAYLOAD SECTION   ..]
+.
+[.. message footer ..]
+</code></pre>
+<p>Noise allows you to have complete control over the contents and encoding/parsing of a messages header/footer section, alongside the encoding/parsing of a messages content section.</p>
+<p>Simply pass a callback function to your <code>*noise.Node</code> instance, which will be fed in with all of yur nodes incoming/outgoing data such that you may intercept all data feed accordingly.</p>
+<p>You may intercept all incoming/outgoing messages on a per-peer level, such that you can choose to enforce encryption/decryption only for a particular set of peers!</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+
+func main() {
+    params := noise.DefaultParams()
+    
+    node, err := noise.NewNode(params)
+    if err != nil {
+        panic(err)
+    }
+    
+    // Register a callback every single time a peer is initialized.
+    node.OnPeerInit(onInitPeer)
+}
+
+func onInitPeer(node *noise.Node, peer *noise.Peer) error {
+    peer.BeforeMessageReceived(func (node *noise.Node, peer *Peer, incoming []byte) ([]byte, error) {
+        // Every single time you receive a message from a specific peer,
+        // this function will be called with the `contents` your peer
+        // sent you!
+        
+        // You can setup some decryption that will take place
+        // on `incoming` here.
+        
+        // Just leave the incoming data as it is, and return no error.
+        // If an error occurs, a warning will be printed and the peer
+        // will be disconnected.
+        return incoming, nil
+    })
+    
+    peer.BeforeMessageSent(func (node *noise.Node, peer *Peer, outgoing []byte) ([]byte, error) {
+        // Every single time you send a message to a specific peer,
+        // this function will be called with the `contents` of your
+        // message to be sent!
+        
+        // You can setup some encryption that will take place
+        // on `outgoing` here.
+        
+        // Just leave the outgoing data as it is, and return no error.
+        // If an error occurs, a warning will be printed and the peer
+        // will be disconnected.
+        return outgoing, nil
+    }
+    
+    // Some additional functions to be aware of that lets you handle
+    // the encoding/parsing of the header/footer section of all messages!
+    peer.OnEncodeHeader(...)
+    peer.OnEncodeFooter(...)
+    peer.OnDecodeHeader(...)
+    peer.OnDecodeFooter(...)
+    
+    return nil
+}
+</code></pre>
+<p>Note that everything performed inside any of the callback functions should not be blocking (i.e. infinite loops), otherwise Noise will deadlock as all callbacks are called synchronously.</p>
+<p>This overall serves as a nice teaser on the nature of how one can hook/intercept specific networking-related operations via Noise.</p>
+<p>For more information regarding the different kinds of network operations that may be intercepted, check out the <code>Peer</code> section.</p>
+<a class="header" href="#wire-format" id="wire-format"><h3>Wire Format</h3></a>
+<p>Over the wire, a message is then prefixed with an unsigned 64-bit variable-sized integer denoting the length of the message as follows:</p>
+<pre><code class="language-bash">[length of message as unsigned 64-bit variable-sized integer]
+.
+.
+[.. message header ..]
+.
+[.. START PAYLOAD SECTION ..]
+[opcode (unsigned 8-bit integer)]
+[contents ([]byte)]
+[.. END PAYLOAD SECTION   ..]
+.
+[.. message footer ..]
+</code></pre>
+<p>To prevent payload buffer over-run attacks, a configuration option is provided on instantiating a node to set the max message size <code>MaxMessageSize</code>.</p>
+<a class="header" href="#serializationdeserialization-1" id="serializationdeserialization-1"><h2>Serialization/Deserialization</h2></a>
+<p>Noise emphasizes on performance, and thus by default does not require developers to have to make use of a message serialization/deserialization scheme such as <code>protobuf</code> or <code>msgpack</code> from the get-go.</p>
+<p>The <code>payload</code> package in Noise provides tools to easily assist developers to precisely define how Noise-registered messages are serialized into bytes, and thereafter deserialized into message instances.</p>
+<p>In particular, the tools provided in the <code>payload</code> package by default allows developers to quickly convert statically typed data into little-endian ordered bytes.</p>
+<p>Reading/writing raw little-endian bytes is simple, quick and efficient, and gives developers peace-of-mind knowing that they have complete control over every single byte of their message before it is transmitted over the wire.</p>
+<a class="header" href="#payload-package" id="payload-package"><h3><code>payload</code> package</h3></a>
+<p>By default, the <code>payload</code> package prefixes all strings and byte arrays with their respective lengths.</p>
+<p>Booleans are represented as single bytes, and all integers are little-endian.</p>
+<p>Noise instantiates <code>payload.Reader</code> and <code>payload.Writer</code> instances every single time a message is received/sent respectively.</p>
+<p>You may choose to omit having to use the <code>payload</code> package at any time, and directly plug-n-play <code>protobuf</code> or <code>msgpack</code> to specify how your message types are serialized/deserialized should you desire.</p>
+<pre><code class="language-go">// Here's an example on how to manually specify how the message type `TestMessage`
+// is formatted in terms of little-endian ordered bytes.
+
+import (
+    &quot;github.com/perlin-network/noise&quot;
+    &quot;github.com/perlin-network/noise/payload&quot;
+)
+
+var _ noise.Message = (*TestMessage)(nil)
+
+type TestMessage struct {
+    someBytes []byte
+    someString string
+    someByte byte
+    someUint16 uint16
+    someUint32 uint32
+    someUint64 uint64
+}
+
+// It's best you manually handle and return errors inside each respective
+// Read()/Write() function! This is just for demo code cleanup purposes.
+func check(err error) {
+    if err != nil {
+        panic(err)
+    }
+}
+
+func (t *TestMessage) Read(reader payload.Reader) (noise.Message, error) {
+    var err error
+    
+    t.someBytes, err = reader.ReadBytes()
+    check(err)
+    
+    t.someString, err = reader.ReadString()
+    check(err)
+    
+    t.someByte, err = reader.ReadByte()
+    check(err)
+    
+    t.someUint16, err = reader.ReadUint16()
+    check(err)
+    
+    t.someUint32, err = reader.ReadUint32()
+    check(err)
+    
+    t.someUint64, err = reader.ReadUint64()
+    check(err)
+    
+    return t, nil
+}
+
+func (t *TestMessage) Write() []byte {
+    return payload.NewWriter(nil).
+        WriteBytes(t.someBytes).
+        WriteString(t.someString).
+        WriteByte(t.someByte).
+        WriteUint16(t.someUint16).
+        WriteUint32(t.someUint32).
+        WriteUint64(t.someUint64).
+        Bytes()
+}
+
+// Register the message type to Noise.
+noise.RegisterMessage(noise.NextAvailableOpcode(), (*TestMessage)(nil))
+</code></pre>
+<pre><code class="language-go">// Let's assume there exists a protobuf-defined message called `ProtobufMessage`.
+//
+// We can have Noise recognize it as a noise.Message by implementing
+// both Read() and Write() functions for `ProtobufMessage`!
+
+import &quot;github.com/golang/protobuf/proto&quot;
+
+var _ noise.Message = (*ProtobufMessage)(nil)
+
+// It's best you manually handle and return errors inside each respective
+// Read()/Write() function! This is just for demo code cleanup purposes.
+func check(err error) {
+    if err != nil {
+        panic(err)
+    }
+}
+
+func (t *ProtobufMessage) Read(reader payload.Reader) (noise.Message, error) {
+    bytes, err := reader.ReadBytes()
+    check(err)
+    
+    err = proto.Unmarshal(bytes, t)
+    check(err)
+    
+    return t, nil
+}
+
+func (t *ProtobufMessage) Write() []byte {
+    bytes, err := proto.Marshal(t)
+    check(err)
+    
+    return payload.NewWriter(nil).
+        WriteBytes(bytes).
+        Bytes()
+}
+
+// Register the message type to Noise.
+noise.RegisterMessage(noise.NextAvailableOpcode(), (*ProtobufMessage)(nil))
+</code></pre>
+<a class="header" href="#timeouts" id="timeouts"><h2>Timeouts</h2></a>
+<p>One bit that is always good to have complete control over is the ability to enforce timeouts for fundamental networking operations.</p>
+<p>For the time being (<em>open to suggestions!</em>), timeouts may be set for:</p>
+<ol>
+<li>retrieving and processing of a single message (<code>ReceiveMessageTimeout</code>),</li>
+<li>on attempting to send a message to a peer (<code>SendMessageTimeout</code>),</li>
+<li>and on waiting for the send queue worker to be available (<code>SendWorkerBusyTimeout</code>).</li>
+</ol>
+<a class="header" href="#identities" id="identities"><h1>Identities</h1></a>
+<p>Apart from your nodes external IP and port, p2p applications typically instill that each node should have some sort of publicly verifiable identity.</p>
+<p>The identity could comprise of all sorts of things: from a string of random bytes to a cryptographically verifiable identity.</p>
+<p>Most likely, you would want a cryptographic ID for your node.</p>
+<p>As of right now, there exists a few identity schemes which Noise provides built-in support for that you may use on the get-go for your p2p application:</p>
+<ol>
+<li>Ed25519 identities</li>
+<li>S/Kademlia-compatible Ed25519 identities</li>
+</ol>
+<p>You may additionally create/implement your own identity schemes that any node/peer may support in Noise by simply having your scheme implement the following interface:</p>
+<pre><code class="language-go">package identity
+
+import &quot;fmt&quot;
+
+type Keypair interface {
+    fmt.Stringer
+
+    ID() []byte
+    PublicKey() []byte
+    PrivateKey() []byte
+}
+</code></pre>
+<p>Should the identity scheme you wish to implement not have any sort of <code>PrivateKey()</code> or <code>PublicKey()</code> or <code>ID()</code> associated to it, you may simply stub out those functions and ignore their implementation.</p>
+<p>After picking/implementing an identity scheme of your choice for your p2p application, it is simple to have your node adopt it as follows:</p>
+<pre><code class="language-go">import (
+    &quot;github.com/perlin-network/noise&quot;
+    &quot;github.com/perlin-network/noise/identity/ed25519&quot;
+    &quot;github.com/perlin-network/noise/skademlia&quot;
+)
+
+params := noise.DefaultParams()
+
+// Generate a random Ed25519 keypair w/ EdDSA signature scheme support
+// for your node.
+params.Keys = ed25519.RandomKeys()
+
+// Generate a random S/Kademlia-compatible Ed25519 keypair w/ EdDSA 
+// signature scheme support for your node.
+params.Keys = skademlia.RandomKeys()
+
+// Load an existing Ed25519 keypair for your node.
+params.Keys = ed25519.LoadKeys([]byte{...})
+
+// Load an existing S/Kademlia-compatible keypair for your node.
+// Wondering what C1 and C2 are for? Check out S/Kademlia's documentation!
+params.Keys = skademlia.LoadKeys([]byte{...}, skademlia.DefaultC1, skademlia.DefaultC2)
+</code></pre>
+<a class="header" href="#signingverifying-messages" id="signingverifying-messages"><h2>Signing/Verifying Messages</h2></a>
+<p>Signature schemes are stubbed out into an interface which you could implement to integrate
+cryptographic signatures into supported protocol building blocks Noise provides.</p>
+<p>All signature schemes implement the following interface:</p>
+<pre><code class="language-go">type Scheme interface {
+    Sign(privateKey, messageBuf []byte) ([]byte, error)
+    Verify(publicKeyBuf, messageBuf, signatureBuf []byte) error
+}
+</code></pre>
+<p>As of right now, Noise provides off-the-shelf the following signature schemes:</p>
+<ul>
+<li>EdDSA Signature Scheme (assembly-optimized)</li>
+</ul>
+<p>You may use a signature scheme to sign/verify raw arrays of bytes to see
+whether or not a signature was generated by a specified public key like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise/signature/eddsa&quot;
+
+var node *noise.Node
+
+message := &quot;We're going to sign this message with our node!&quot;
+
+// Sign a message using the EdDSA signature scheme.
+signature, err := eddsa.Sign(node.Keys.PrivateKey(), []byte(message))
+if err != nil {
+    panic(&quot;failed to sign the message&quot;)
+}
+
+fmt.Println(&quot;Signature:&quot;, signature)
+
+// Now let's verify that the signature is under our own nodes identity!
+
+fmt.Println(&quot;Is the signature valid?&quot;, 
+    eddsa.Verify(node.Keys.PublicKey(), []byte(message), signature))
+</code></pre>
+<a class="header" href="#transports" id="transports"><h1>Transports</h1></a>
+<p>The <code>transport</code> package provides Noise built-in transport layer support for:</p>
+<ol>
+<li>TCP</li>
+<li>In-Memory</li>
+</ol>
+<p>To use either one of the transport layers, it is a matter of setting the option <code>Transport</code>:</p>
+<pre><code class="language-go">import (
+    &quot;github.com/perlin-network/noise&quot;
+    &quot;github.com/perlin-network/noise/transport&quot;
+)
+
+params := noise.DefaultParams()
+
+// Use TCP as your nodes transport layer.
+params.Transport = transport.NewTCP()
+
+// Have your nodes transport layer be in-memory.
+params.Transport = transport.NewBuffered()
+</code></pre>
+<a class="header" href="#a-small-note" id="a-small-note"><h2>A small note.</h2></a>
+<p>Noise for the time being really only currently supports specific types of network transport layer protocols.</p>
+<p>Specifically, the ones that guarantee message ordering, and guarantee reliable message delivery through error-checking schemes.</p>
+<p><em>Unsurprisingly</em>, ones like TCP.</p>
+<p>The reasoning for it is simple: you sacrifice performance having to reliably guarantee message ordering should you do it on the application layer (in which Noise operates within).</p>
+<p>Though what's more, one of the biggest reasons a large number of complex networking protocol constructs can be so succinctly represented in Noise is precisely because Noise relies on the transport layer for linearized message ordering.</p>
+<blockquote>
+<p><em>However</em>, that does not mean only TCP is supported by Noise.</p>
+</blockquote>
+<p>There still exists the option of introducing reliable ordering on top of an unreliable transport layer and plugging it into Noise, or really just plugging in any type of transport layer into Noise that you can think of.</p>
+<p>That being said though, be aware that you're crossing unexplored waters should you attempt to plug an unreliable transport layer into Noise.</p>
+<p>In spite of my succinct warning, there exists a large number of transport layers that would be interesting to see coupled with Noise.</p>
+<p>Examples of those transport layers would include QUIC, or Tor.</p>
+<p>Hence, we made it simple for you to be able to plug in a custom transport layer implementation into Noise.</p>
+<p>All you have to do is have your transport layer-related implementation code implement the following interface:</p>
+<pre><code class="language-go">package transport
+
+import (
+    &quot;fmt&quot;
+    &quot;net&quot;
+)
+
+type Layer interface {
+    fmt.Stringer
+
+    Listen(host string, port uint16) (net.Listener, error)
+    Dial(address string) (net.Conn, error)
+
+    IP(address net.Addr) net.IP
+    Port(address net.Addr) uint16
+}
+</code></pre>
+<p>Once implemented, set an instance of your implementation to the <code>Transport</code> option and enjoy.</p>
+<p><strong>Note:</strong> There is a good chance that if you're looking to plug-n-play an existing transport layer Go implementation into Noise, be sure to look out for the ones that export <code>Listen()</code> or <code>Dial()</code> functions that are interoperable with Go's <code>net</code> standard library package.</p>
+<a class="header" href="#nat-traversal" id="nat-traversal"><h1>NAT Traversal</h1></a>
+<p>NAT traversal schemes which Noise provides built-in support for are:</p>
+<ol>
+<li>NAT-PMP</li>
+<li>UPnP IGDv1/IDGv2</li>
+</ol>
+<p>Using either one of the schemes above is a matter of setting the <code>NAT</code> option like so:</p>
+<pre><code class="language-go">import (
+    &quot;github.com/perlin-network/noise&quot;
+    &quot;github.com/perlin-network/noise/nat&quot;
+)
+
+params := noise.DefaultParams()
+
+// Enable NAT-PMP NAT traversal support.
+params.NAT = pmp.New()
+
+// Enable UPnP IGDv1/IDGv2 NAT traversal support.
+params.NAT = upnp.New()
+</code></pre>
+<p>You may additionally implement your own NAT traversal protocol support which your nodes may make use of. Noise only requires the following interface to be implemented:</p>
+<pre><code class="language-go">package nat
+
+import (
+    &quot;net&quot;
+    &quot;time&quot;
+)
+
+// Provider represents a barebones generic interface to a NAT traversal
+// network protocol.
+type Provider interface {
+    ExternalIP() (net.IP, error)
+    AddMapping(protocol string, externalPort, internalPort uint16, expiry time.Duration) error
+    DeleteMapping(protocol string, externalPort, internalPort uint16) (err error)
+}
+</code></pre>
+<p>When a NAT traversal protocol is specified, a port mapping is automatically made which maps the internal port <code>Port</code> to an external port <code>ExternalPort</code>.</p>
+<p>The port mapping is destroyed upon calling a <code>Kill()</code>, which blocks the current goroutine until the node gracefully comes to a complete stop of all of its operations.</p>
+<blockquote>
+<p><strong>Note:</strong> Noise does not provide any utilities as of yet to help you call the <code>Kill()</code> function automatically when your application exits! Be sure to do this yourself or risk leaving a port mapping open on your PC.</p>
+</blockquote>
+<p>Should no <code>Host</code> option be set before instantiating your node, the NAT traversal protocol will also be queried for your nodes external address.</p>
+<p>A quick tip when making your own implementation to use with Noise is to have all device gateway-related setup happen in the constructor of your code.</p>
+<p>Additionally, should any errors occur, immediately <code>panic()</code> as it is undefined behavior as to what happens if a broken NAT traversal mechanism is used for instantiating and running a node.</p>
+<p>All built-in NAT traversal protocol support will invoke <code>panic()</code> should the nodes' router not support a specified NAT traversal protocol.</p>
+<a class="header" href="#peers" id="peers"><h1>Peers</h1></a>
+<p>Nodes in <strong>noise</strong> come with the ability to be able to dial and connect to other peers.</p>
+<p>After taking some time to configure and instantiate your node, you can dial/connect to a peer like so:</p>
+<pre><code class="language-go">package main
+
+import (
+    &quot;github.com/perlin-network/noise&quot;
+)
+
+func main() {
+    params := noise.DefaultParams()
+    params.Port = uint16(3000)
+    
+    node, err := noise.NewNode(params)
+    if err != nil {
+        panic(err)
+    }
+    
+    // Start listening for incoming peers.
+    go node.Listen()
+    
+    // Dial peer at address 127.0.0.1:3001.
+    peer, err := node.Dial(&quot;127.0.0.1:3001&quot;)
+    if err != nil {
+        panic(&quot;failed to dial peer located at 127.0.0.1:3001!&quot;)
+    }
+    
+    // ... do whatever you want with `peer` here.
+    
+    select{}
+}
+</code></pre>
+<p>The node function <code>Dial(addres string)</code> returns an instance of <code>*noise.Peer</code> which provides you a large number of convenience functions for interacting/dealing with a peer.</p>
+<p>An error will return should there be issues connecting/dialing a peer.</p>
+<blockquote>
+<p><strong>Note:</strong> You may have multiple <code>*noise.Peer</code> instances connected to the exact same computer/address. They are unique amongst one another, and simply represent but a single connection instance to a computer.</p>
+</blockquote>
+<p>The next page will go over briefly how to send/receive message given a <code>*noise.Peer</code> instance.</p>
+<a class="header" href="#intercepting-events" id="intercepting-events"><h2>Intercepting Events</h2></a>
+<p>Every single time a peer connects to your node, or a connection is successfully established against a peer, you may pass to a <code>*noise.Node</code> instance a callback function to execute.</p>
+<pre><code class="language-go">var node *noise.Node
+
+node.OnPeerConnected(func(node *noise.Node, peer *noise.Peer) error {
+    // This function gets called every time a peer connects
+    // to you!
+    return nil
+})
+
+node.OnPeerDialed(func(node *noise.Node, peer *noise.Peer) error {
+    // This function gets called every time you successfully
+    // connect to a peer!
+    return nil
+})
+
+node.OnPeerInit(func(node *noise.Node, peer *noise.Peer) error {
+    // This function gets called every time a peer connects
+    // to you, or you successfully connect to a peer!
+    return nil
+})
+</code></pre>
+<p>Just like every other callback function passed to Noise, be sure that no blocking (ex: infinite loop) occurs in any callback function or else Noise will deadlock.</p>
+<p>Some reasons for why you would want to intercept any of these events include:</p>
+<ol>
+<li>instantiating metadata for your peer,</li>
+<li>spawning new worker goroutines that run in parallel with every single peer,</li>
+<li>and sending/receiving messages upon successful instantiation of a <code>*noise.Peer</code>.</li>
+</ol>
+<a class="header" href="#metadata-1" id="metadata-1"><h2>Metadata</h2></a>
+<p>Every single <code>*noise.Peer</code> instance is capable of holding custom metadata that you choose to pass around throughout your p2p application.</p>
+<p>The exposed functions for manipulating custom metadata is akin to the <code>sync.Map</code> API in Go's standard library.</p>
+<p>Should you share any metadata across multiple goroutines, be sure to use some sync primitives to safely share data around.</p>
+<pre><code class="language-go">// Given a `*noise.Peer` instance `peer`,
+var peer *noise.Peer
+
+someValue := peer.LoadOrStore(&quot;some key&quot;, uint32(64))
+// `someValue` is an interface{} type that may be safely casted to uint32
+
+queriedValue := peer.Get(&quot;some key&quot;)
+// `queriedValue` is an interface{} type that may be safely casted to uint32
+
+fmt.Println(&quot;Must be true:&quot;, someValue == queriedValue)
+
+peer.Set(&quot;some key&quot;, true)
+
+fmt.Println(&quot;The value for key `some key` is now:&quot;, peer.Get(&quot;some key&quot;))
+
+peer.Delete(&quot;some key&quot;)
+
+fmt.Println(&quot;The value for key `some key` is now nil:&quot;, peer.Get(&quot;some key&quot;))
+</code></pre>
+<a class="header" href="#cleanup-1" id="cleanup-1"><h2>Cleanup</h2></a>
+<p>After you are done with a peer, you may gracefully stop the peer by invoking the <code>peer.Disconnect()</code> function.</p>
+<p>The function will block the current goroutine until all workers related to a peer have been put to a complete stop.</p>
+<p>You may additionally specify a callback function to be called when a specified peer disconnects to cleanup any resources/variables left behind of a peer.</p>
+<pre><code class="language-go">var peer *noise.Peer
+
+peer.OnDisconnect(func(node *noise.Node, peer *noise.Peer) error {
+    // handle disconnect logic here...
+    return nil
+})
+
+// We can also have a disconnect callback registered on every single peer.
+var node *noise.Node
+
+node.OnPeerDisconnected(func(node *noise.Node, peer *noise.Peer) error {
+    // handle disconnect logic here...
+    return nil
+})
+
+// The above is just syntactical sugar for the following code.
+node.OnPeerInit(func(node *noise.Node, peer *noise.Peer) error {
+    peer.OnDisconnect(func(node *noise.Node, peer *noise.peer) error {
+        // handle disconnect logic here..
+        return nil
+    })
+    
+    return nil
+})
+</code></pre>
+<a class="header" href="#io" id="io"><h1>I/O</h1></a>
+<p>After having established a connection with a peer and registering a couple of <code>noise.Message</code> types, you are now ready to start sending and receiving some messages via Noise.</p>
+<p>Noise was designed with the intent of making message I/O be as simple as possible. More specifically, writing message sending/receiving code should <em>look</em> and <em>feel</em> synchronous when in reality Noise handles all of the asynchronous/concurrent work for you.</p>
+<p>For a bit of background, from the very moment a peer is successfully dialed, or a peer connects to your node, two goroutines are spawned.</p>
+<p>A send worker is spawned responsible for linearizing and send messages over the wire.</p>
+<p>A receive worker is spawned responsible for deciphering the contents of raw network packets into <code>noise.Opcode</code> and <code>noise.Message</code> instances that may be intercepted.</p>
+<a class="header" href="#sending-a-message" id="sending-a-message"><h2>Sending a message</h2></a>
+<p>In order to send a message, you would instantiate a message you wish to send over the wire and use either of the following methods:</p>
+<pre><code class="language-go">var peer *noise.Peer
+var msg noise.Message
+
+// Send a message, and block the current goroutine until the message is successfully sent.
+err := peer.SendMessage(msg)
+if err != nil {
+    panic(&quot;failed to send message&quot;)
+}
+
+// Send a message and create a channel which may be read for broadcasting errors at a later time.
+err := &lt;-peer.SendMessageAsync(msg)
+if err != nil {
+    panic(&quot;failed to send message&quot;)
+}
+</code></pre>
+<p><code>SendMessage(noise.Message) error</code> sends a message whose type is registered with Noise to a specified peer. Calling this function will block the current goroutine until the message is successfully sent.</p>
+<p>On the other hand, using <code>SendMessageAsync(noise.Message) &lt;-chan error</code> will not block the current goroutine, and instead simply queues the message up and lets you read from the channel for broadcasting errors anytime throughout your p2p application.</p>
+<p>Both methods above are guaranteed to block until your message to be sent gets successfully queued into the send worker.</p>
+<p>It is guaranteed that by sending message through either of the means above, all messages are sent in a linearized order.</p>
+<p>All functions will return errors if:</p>
+<ol>
+<li>it takes too long to send a message,</li>
+<li>the message requested to be sent is not actually registered to Noise,</li>
+<li>or the send worker responsible for linearizing the order of sent messages is too busy for too long of a period of time.</li>
+</ol>
+<p>It is guaranteed that <code>SendMessageAsync</code> will at most only emit one error; you may choose to directly <code>close()</code> the channel after receiving a single message should you rather not have Go's garbage collector manually close the channel for you.</p>
+<p>To figure out how to adjust the timeouts which define how long is 'too long' as to when a message is considered to have failed to be delivered, check out the <code>Messages</code> section in <code>Nodes</code>.</p>
+<a class="header" href="#receiving-a-message" id="receiving-a-message"><h2>Receiving a message</h2></a>
+<p>In order to receive a message, you would specify the opcode of the message you expect to receive from a given peer like so:</p>
+<pre><code class="language-go">import &quot;time&quot;
+
+var peer *noise.Peer
+var someMessagesOpcode noise.Opcode
+
+// Receive an expected message, but panic should we be waiting for the message for
+// too long.
+select {
+    case expectedMessage := &lt;-peer.Receive(someMessagesOpcode):
+        fmt.Println(&quot;Got the message we were looking for:&quot;, expectedMessage)
+    case &lt;-time.After(3 * time.Second):
+        panic(&quot;We waited for 3 seconds and still didn't get the message we wanted :(&quot;)
+}
+</code></pre>
+<p><code>Receive(noise.Opcode) &lt;-chan noise.Message</code> was intentionally designed to return a channel that may be read from multiple times to allow for complete flexibility on how messages should be received from a peer.</p>
+<p>You may timeout the receiving of a message should we be waiting for a message from a peer for too long, or create an infinite loop acting as an event loop that expects, receives, and processes multiple messages designated by their opcodes at once.</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;time&quot;
+
+var peer *noise.Peer
+var opcode1, opcode2, opcode3 noise.Opcode
+
+// An example of an infinite loop that awaits and handles messages from a designated
+// peer.
+func receiveWorkerLoop(peer *noise.Peer, kill &lt;-chan struct{}) {
+    for {
+        select {
+        case &lt;-kill:
+            return
+        case msg := &lt;-peer.Receive(opcode1):
+            // handle opcode 1 here...
+        case msg := &lt;-peer.Receive(opcode2):
+            // handle opcode 2 here...
+        case msg := &lt;-peer.Receive(opcode3):
+            // handle opcode 3 here...
+        default:
+            // maybe do something else if we did not receive a message?
+        }
+    }
+}
+
+func main() {
+    var node *noise.Node
+    
+    // ...
+    // ... setup node here
+    // ...
+    
+    // Have the receive worker loop run in a new goroutine on every single
+    // newly connected/dialed peer.
+    node.OnPeerInit(func(node *noise.Node, peer *noise.Peer) error {
+        kill := make(chan struct{})
+        go receiveWorkerLoop(peer, kill)
+        
+        // Maybe after 5 seconds, kill the receive worker loop?
+        go func() {
+            &lt;-time.After(5 * time.Seconds)
+            
+            close(kill)
+        }()
+        
+        return nil
+    })
+}
+</code></pre>
+<a class="header" href="#atomic-operations" id="atomic-operations"><h2>Atomic Operations</h2></a>
+<p>One important feature Noise provides is being able to perform atomic operations over the network upon the recipient of a message.</p>
+<p>Examples of such atomic operations include blocking the recipient of any messages from a designated peer except for a specific message.</p>
+<p>This is is extremely useful for establishing synchronization points/acknowledgements between peers that from both sides, which allow us to know that they both completed some sort of action such as completing some handshake protocol scheme at the same time.</p>
+<pre><code class="language-go">import &quot;time&quot;
+
+var peer *noise.Peer
+var opcodeACK noise.Opcode
+
+type ACK struct { noise.Message }
+
+noise.RegisterMessage(noise.NextAvailableOpcode(), (*ACK)(nil))
+
+// Send an ACK message to establish a synchronization point.
+err := peer.SendMessage(ACK{})
+if err != nil {
+    panic(&quot;failed to send ACK to peer&quot;)
+}
+
+// Upon the recipient of an ACK message, block the recipient of any
+// other messages from this peer until `Unlock()` gets called.
+locker := peer.LockOnReceive(b.opcodeACK)
+defer locker.Unlock()
+
+select {
+    case &lt;-time.After(3 * time.Second):
+        return errors.Wrap(protocol.DisconnectPeer, &quot;timed out waiting for AEAD ACK&quot;)
+    case &lt;-peer.Receive(b.opcodeACK):
+}
+
+// We have entered the 'critical section' of our protocol that is safely executed
+// by our node and our peer. We can do stuff like setup encryption/decryption
+// schemes where we encrypt every message we send, and decrypt every message
+// we receive from now on.
+//
+// It is guaranteed that within this critical section, we will NOT receive
+// or handle any other messages.
+
+peer.BeforeMessageReceived(func(node *noise.Node, peer *noise.Peer, msg []byte) (buf []byte, err error) {
+    // ... do decryption here.
+    return msg, nil
+})
+
+peer.BeforeMessageSent(func(node *noise.Node, peer *noise.Peer, msg []byte) (buf []byte, err error) {
+    // ... do encryption here.
+    return msg, nil
+})
+
+// Do whatever else you want here until `locker.Unlock()` gets called.
+</code></pre>
+<a class="header" href="#protocol" id="protocol"><h1>Protocol</h1></a>
+<p>Now that we have gone over the concepts of nodes and peers, you know how to setup node identities, listen for/connect to peers, send messages to/receive messages from peers, deal with message serialization/deserialization, and a lot more through Noise.</p>
+<p>On a high level, <strong>noise</strong> comes with a <code>protocol</code> package that builds on top of a variety of node/peer events to allow you to easily compose your p2p applications networking protocol out of composable <code>protocol.Block</code>'s.</p>
+<pre><code class="language-go">package protocol
+
+import &quot;github.com/perlin-network/noise&quot;
+
+type Block interface {
+    OnRegister(p *Protocol, node *noise.Node)
+    OnBegin(p *Protocol, peer *noise.Peer) error
+    OnEnd(p *Protocol, peer *noise.Peer) error
+}
+</code></pre>
+<p>A <code>protocol.Block</code> represents a implementation of a modular, well-defined sub-protocol defined by 3 events: <code>OnRegister</code>, <code>OnBegin</code>, and <code>OnEnd</code>.</p>
+<p>When a block gets registered into a protocol, <code>OnRegister</code> gets called. Typically, you would define variables, register opcodes, register callback functions to your <code>*noise.Node</code>, or register <code>noise.Message</code>'s inside <code>OnRegister</code>.</p>
+<p><code>OnBegin</code> gets called when a peer has completed executing all other prior blocks. You would define the core block logic inside <code>OnBegin</code> you would expect a peer to follow, or set custom metadata to a peer, or even spawn infinite-loop receive workers to handle messages from peers here.</p>
+<p><code>OnEnd</code> gets called when a peer disconnects, in the case that you wish to clean up any particular tracked data of a peer should they depart from your network.</p>
+<p>For both <code>OnBegin</code> and <code>OnEnd</code>, you can return a <code>protocol.DisconnectPeer</code> error at any time which will directly halt execution of the protocols logic and disconnect the peer from your node should they misbehave/error out in any way.</p>
+<p>Returning any other sort of error otherwise would directly log the error onto your console as a warning.</p>
+<p>Returning nil in <code>OnBegin</code> would have peers transition into the next block within the protocol.</p>
+<p>When a peer runs out of blocks to execute, they remain dormant for the time being.</p>
+<a class="header" href="#composition" id="composition"><h2>Composition</h2></a>
+<p>Your p2p application would compose together these blocks in an order you may choose to allow you to easily build a custom, secure, and performant networking protocol.</p>
+<p>On a high level, examples of what a <code>protocol.Block</code> may represent are:</p>
+<ol>
+<li>a handshake protocol section,</li>
+<li>a session establishment protocol section,</li>
+<li>a message broadcasting protocol section,</li>
+<li>or an overlay network section.</li>
+</ol>
+<p>Noise provides a number of high-level, well-tested basic protocol building blocks any p2p application would need to help you kickstart building your p2p application.</p>
+<p>After picking a few blocks, or even implementing your own <code>protocol.Block</code>'s, you may then define your protocol like so:</p>
+<pre><code class="language-go">import (
+    &quot;github.com/perlin-network/noise/protocol&quot;
+    &quot;github.com/perlin-network/noise/handshake/ecdh&quot;
+    &quot;github.com/perlin-network/noise/cipher/aead&quot;
+    &quot;github.com/perlin-network/noise/skademlia&quot;
+)
+
+policy := protocol.New()
+
+// First, all nodes must perform an Elliptic-Curve Diffie-Hellman (ECDH) handshake
+// between each other to establish a shared symmetric encryption key.
+policy.Register(ecdh.New())
+
+// The shared key from ECDH then gets derived by a HMAC to establish a new encrypted
+// session where all communication between a pair of nodes is then encrypted using
+// Authenticated Encryption w/ Authenticated Data (AEAD) via AES-256 GCM.
+policy.Register(aead.New())
+
+// After all communication has been readily encrypted, perform a S/Kademlia handshake
+// to exchange S/Kademlia node IDs, setup a S/Kademlia routing table, and start
+// handling S/Kademlia-related overlay network RPC messages.
+policy.Register(skademlia.New())
+</code></pre>
+<p>The order in which you register the blocks as you may be able to tell matters, as <code>protocol</code> for the time being linearly traverses through all blocks in the order they are registered.</p>
+<p>After registering the ordering in which you expect peers to execute blocks, you may then enforce your custom networking protocol on multiple <code>*noise.Node</code> instances at once like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+
+var node1, node2 *noise.Node
+
+// Enforce both node1 and node2 to follow your custom policy
+// when it comes to dealing with peers.
+policy.Enforce(node1)
+policy.Enforce(node2)
+</code></pre>
+<p>All peers which connect to either <code>node1</code> or <code>node2</code> from then on will follow your policy, and be disconnected from you should they fail to otherwise.</p>
+<p>Typically, you would define and enforce your protocol on your node before you start listening for peers and start dialing/connecting to other peers.</p>
+<blockquote>
+<p><strong>Note:</strong> All protocol logic is handled in a separate goroutine from where nodes/peers are instantiated, so it is safe to execute blocking code inside a block so long as you intend to block a peer from progressing further from within a protocol until some condition is met.</p>
+</blockquote>
+<a class="header" href="#helpers" id="helpers"><h2>Helpers</h2></a>
+<p>A set of helper functions are provided in the <code>protocol</code> package to help you manage a small set of well-defined metadata we at Perlin found to be common-place in all kinds of networking protocools.</p>
+<p>Shared keys, node IDs, peer IDs, and mapping peer IDs to <code>*noise.Peer</code> instances are what we provide off-the-shelf.</p>
+<p>We additionally provide a standardized interface for defining what an ID should comprise of:</p>
+<pre><code class="language-go">package protocol
+
+import &quot;github.com/perlin-network/noise&quot;
+import &quot;fmt&quot;
+
+type ID interface {
+    fmt.Stringer
+    noise.Message
+
+    Equals(other ID) bool
+
+    PublicKey() []byte
+    Hash() []byte
+}
+
+
+func HasSharedKey(peer *noise.Peer) bool { ... }
+func LoadSharedKey(peer *noise.Peer) []byte { ... }
+func MustSharedKey(peer *noise.Peer) []byte { ... } 
+func SetSharedKey(peer *noise.Peer, sharedKey []byte) { ... }
+func DeleteSharedKey(peer *noise.Peer) { ... }
+
+func SetNodeID(node *noise.Node, id ID) { ... }
+func DeleteNodeID(node *noise.Node) { ... }
+func HasPeerID(peer *noise.Peer) bool { ... }
+func SetPeerID(peer *noise.Peer, id ID) { ... }
+func DeletePeerID(peer *noise.Peer) { ... }
+
+func NodeID(node *noise.Node) ID { ... }
+func PeerID(peer *noise.Peer) ID { ... }
+func Peer(node *noise.Node, id ID) *noise.Peer { ... }
+</code></pre>
+<p>If you would like suggest any other type of metadata you think is common-place within a large variety of networking protocols that could be managed from within the <code>protocol</code> package, feel free to post up a Github issue.</p>
+<p>For the next couple of pages, we'll go over a couple of high-level protocol blocks which Noise provides from the get-go.</p>
+<a class="header" href="#elliptic-curve-diffie-hellman-handshake" id="elliptic-curve-diffie-hellman-handshake"><h1>Elliptic Curve Diffie-Hellman Handshake</h1></a>
+<p><strong>noise</strong> provides a simple implementation of an Elliptic Curve Diffie-Hellman (ECDH) handshake that may be used to generate a shared symmetric key amongst two peers as a <code>protocol.Block</code>.</p>
+<p>The elliptic curve used is the Twisted-Edwards (Ed25519) curve, accompanied by the EdDSA signature scheme to verify handshake requests.</p>
+<p>After a handshake is successful, the shared key established is set within the peers metadata via <code>protocol.SetSharedKey([]byte)</code>.</p>
+<p>A timeout may be established in terms of how long a peer should wait for a handshake request from a newly established peer like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/handshake/ecdh&quot;
+import &quot;time&quot;
+
+block := ecdh.New().TimeoutAfter(3 * time.Second)
+
+// Optionally, feel free to not use the builder pattern and set the timeout like so.
+block.TimeoutAfter(5 * time.Second)
+
+// Additionally, you can change up the handshake message contents to be sent/verified
+// like so. The default handshake messages contents is `.noise_handshake`.
+block.WithHandshakeMessage(&quot;some handshake message here!&quot;)
+</code></pre>
+<p>A debug message would be printed should the handshake be successful. If at any stage throughout the protocol a peer fails to complete a requested action, they would be immediately disconnected.</p>
+<a class="header" href="#protocol-1" id="protocol-1"><h2>Protocol</h2></a>
+<p>Let's define two peers \( A \) and \( B \).</p>
+<p>When peer \( A \) manages to connect to peer \(B \), or vice versa, both generate an ephemeral Ed25519 keypair comprised of a private key \(x \), and a public key \( g^x \) where \( g \) is a Twisted-Edwards curve generator point.</p>
+<p>Both peers would then send a <code>Handshake</code> message to one another whose contents comprise of:</p>
+<ol>
+<li>their ephemeral public keys,</li>
+<li>and an EdDSA signature of the message <code>.noise_handshake</code> (customizable).</li>
+</ol>
+<p>If either peer \( A \) or peer \( B \) does not receive the <code>Handshake</code> message after a specified period of time, either peer \(A \) or peer \(B \) would disconnect from one another.</p>
+<p>Should either one receive the <code>Handshake</code> message, said peer would verify the EdDSA signature within the message. If the signature is invalid, they would disconnect away from the peer.</p>
+<p>Afterwards, a shared key then is computed. Assuming that peer A's ephemeral private key is \(x_a\) and peer B's ephemeral private key \(x_b\), peer A would compute their shared key as \(x_a * g^{x_b}\), and peer B would compute their shared key as \(x_b * g^{x_a} \).</p>
+<p>Both shared keys generated from either sides in this case would be equivalent as elliptic curve point addition is commutative, and would not unrecoverable by an attacker intercepting communication channels as attempting to derive the shared key is equivalent to solving the <a href="https://en.wikipedia.org/wiki/Discrete_logarithm">discrete logarithm problem</a>.</p>
+<a class="header" href="#authenticated-encryption-w-authenticated-data" id="authenticated-encryption-w-authenticated-data"><h1>Authenticated Encryption w/ Authenticated Data</h1></a>
+<p><strong>noise</strong> provides a simple wrapper around Go's de-facto implementation of Authenticated Encryption w/ Authenticated Data (AEAD) as a <code>protocol.Block</code>.</p>
+<p><code>aead</code> relies on a prior block providing an established shared key between two peers which is set within a given peers metadata through a call to <code>protocol.SetSharedKey([]byte)</code>.</p>
+<p>If an established shared key could not be found upon entry to the <code>aead</code> block, the peer will be disconnected.</p>
+<p>The shared key from prior blocks would be passed through a SHA256-based <a href="https://en.wikipedia.org/wiki/HKDF">HKDF</a>, and thereafter used to encrypt/decrypt all future communications amongst a pair of peers.</p>
+<p>Any other hash function may optionally be set to perform key derivation like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/noise/cipher/aead&quot;
+import &quot;crypto/sha256&quot;
+import &quot;crypto/sha512&quot;
+
+block := aead.New().WithHash(sha256.New)
+
+// You may optionally opt out from using the builder pattern like so.
+block.WithHash(sha512.New)
+</code></pre>
+<p>By default, AES-256 GCM (Galois Counter Mode) is used for performing AEAD.</p>
+<p>ChaCha20-Poly1305 and XChaCha20-Poly1305 are also supported, but note that the shared key a peer starts off with must be 256 bits.</p>
+<p>You may set the cipher to use w/ <code>aead</code> like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/noise/cipher/aead&quot;
+import &quot;crypto/cipher&quot;
+
+block := aead.New()
+
+// Set either one of the 3 cipher suites below to use with the `aead` block.
+aes256_GCM := aead.AES256_GCM
+chacha20_poly1305 := aead.ChaCha20_Poly1305
+xchacha20_poly1305 := aead.XChaCha20_Poly1305
+
+// Or in general, any function of the following format.
+customCipher := func(sharedKey []byte) (cipher.AEAD, error) {
+    // ... setup your cipher here given a HMAC-derived shared key
+}
+
+block.WithSuite(aes256_GCM)
+</code></pre>
+<a class="header" href="#protocol-2" id="protocol-2"><h2>Protocol</h2></a>
+<p>An <code>ACK</code> message is sent between two peers, and received using the atomic locking operation <code>peer.LockOnReceive(opcodeACK)</code> to establish a synchronization point where from a specific time onwards, all messages will be encrypted/decrypted using AEAD.</p>
+<p>Timeouts for expecting to receive the <code>ACK</code> message can be easily set like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/noise/cipher/aead&quot;
+import &quot;time&quot;
+
+block := aead.New().WithACKTimeout(3 * time.Second)
+
+// You may optionally opt out from using the builder pattern like so.
+block.WithACKTimeout(5 * time.Second)
+</code></pre>
+<p>Given that Noise guarantees linearized message delivery which is dependant on the transport layer used, we associate incremental nonces rather than random nonces for establishing authenticated encryption.</p>
+<p>Incremental nonces simply imply that on every message received, we increment our nonce and attempt to decrypt the received message with the new nonce. The same applies for whenever we sent a message.</p>
+<p>The code associated with handling incremental nonces is like so:</p>
+<pre><code class="language-go">import &quot;crypto/cipher&quot;
+import &quot;atomic&quot;
+import &quot;binary&quot;
+
+// ...
+// Perform ACK handling and locking to establish synchronization point here.
+// ...
+
+var ourNonce uint64
+var theirNonce uint64
+var suite cipher.AEAD
+
+peer.BeforeMessageReceived(func(node *noise.Node, peer *noise.Peer, msg []byte) (buf []byte, err error) {
+    theirNonceBuf := make([]byte, suite.NonceSize())
+    binary.LittleEndian.PutUint64(theirNonceBuf, atomic.AddUint64(&amp;theirNonce, 1))
+
+    return suite.Open(msg[:0], theirNonceBuf, msg, nil)
+})
+
+peer.BeforeMessageSent(func(node *noise.Node, peer *noise.Peer, msg []byte) (buf []byte, err error) {
+    ourNonceBuf := make([]byte, suite.NonceSize())
+    binary.LittleEndian.PutUint64(ourNonceBuf, atomic.AddUint64(&amp;ourNonce, 1))
+
+    return suite.Seal(msg[:0], ourNonceBuf, msg, nil), nil
+})
+</code></pre>
+<p>A helpful function that you may choose to use throughout your application is <code>aead.WaitUntilAuthenticated(*noise.Peer)</code>
+which blocks the current goroutine until a peer we specify has successfully setup AEAD encryption/decryption for all incoming/outgoing messages.</p>
+<a class="header" href="#skademlia" id="skademlia"><h1>S/Kademlia</h1></a>
+<p><strong>noise</strong> provides a full-fledged implementation of the S/Kademlia overlay network protocol which
+allows p2p applications to easily achieve reliability in:</p>
+<ol>
+<li>routing messages to/from peers,</li>
+<li>bootstrapping new peers into the network,</li>
+<li>and maintaining a clear overview of the <em>liveness</em> of all peers a node is connected to.</li>
+</ol>
+<a class="header" href="#identity-scheme" id="identity-scheme"><h2>Identity scheme</h2></a>
+<p>Nodes must use a specialized type of identity scheme which S/Kademlia provides to wield S/Kademlia
+as their overlay network protocol of choice, as S/Kademlia explicitly requires node identities
+to be generated through a <a href="https://en.wikipedia.org/wiki/Proof-of-work_system">Proof of Work</a>-based static and
+dynamic cryptographic puzzle parameterized by some constants \(c_1\) and \(c_2\).</p>
+<p>In order to incorporate S/Kademlia as an overlay network into your protocol, you may set it
+up like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/skademlia&quot;
+
+func main() {
+    params := noise.DefaultParams()
+    params.Keys = skademlia.RandomKeys()
+    params.Port = uint16(3000)
+    
+    node, err := noise.NewNode(params)
+    if err != nil {
+        panic(err)
+    }
+    
+    protocol.New().
+        Register(skademlia.New()).
+        Enforce(node)
+    
+    // ... do other stuff with your node here.
+}
+</code></pre>
+<p>Apart from generating a random S/Kademlia-compatible keypair, you can also load in an existing
+keypair as well by calling <code>skademlia.LoadKeys(privateKey []byte, c1 int, c2 int)</code>.</p>
+<p><code>c1</code> and <code>c2</code> in this case are representative of the static and dynamic cryptographic puzzles
+protocol parameters \(c_1\) and \(c_2\).</p>
+<p>S/Kademlia performs its own handshake procedure to validate node identities, and so other
+handshake procedures/message cipher setup blocks may be registered before S/Kademlia like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/skademlia&quot;
+import &quot;github.com/perlin-network/handshake/ecdh&quot;
+import &quot;github.com/perlin-network/cipher/aead&quot;
+
+func main() {
+    params := noise.DefaultParams()
+    params.Keys = skademlia.RandomKeys()
+    params.Port = uint16(3000)
+    
+    node, err := noise.NewNode(params)
+    if err != nil {
+        panic(err)
+    }
+    
+    // Setup our protocol and enforce it on our node.
+    protocol.New().
+        Register(ecdh.New()).
+        Register(aead.New())
+        Register(skademlia.New()).
+        Enforce(node)
+    
+    // ... do other stuff with your node here.
+}
+</code></pre>
+<p>Should any form of identity verification fail while performing S/Kademlia's custom handshake,
+the peer that failed the identity verification will be disconnected from our node.</p>
+<p>Identities are considered to be verified should they pass the static and dynamic crypto puzzle
+parameterized by our selected parameter set \((c_1, c_2, p_{min}, p_{len})\).</p>
+<a class="header" href="#routing-table" id="routing-table"><h2>Routing table</h2></a>
+<p>After a successful handshake, our incoming peer is logged into a <a href="https://en.wikipedia.org/wiki/Kademlia#Routing_tables">Kademlia table data structure</a>
+which is an array of LRU caches in which peer identities are stored with respect to the XOR distance between our nodes
+identity hash, and our peers identity hash.</p>
+<p>A Kademlia table is instantiated when the S/Kademlia block is registered to a protocol which is enforced on a given node instance.</p>
+<p>In order to grab an instance of the Kademlia table underlying our node, you may call <code>skademlia.Table(*noise.Node)</code>:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/noise/skademlia&quot;
+
+var node *noise.Node
+
+// Grab the Kademlia table underlying our node. It will panic
+// if our node does not have S/Kademlia enforced.
+table := skademlia.Table(node)
+
+// Print the 16 closest peers to our node based on XOR distance.
+fmt.Println(skademlia.FindClosestPeers(table,
+    protocol.NodeID(node).(skademlia.ID).Hash(), 16))
+
+// Directly update the liveness of a peer denoted by their ID.
+var peerID skademlia.ID
+err := skademlia.UpdateTable(node, peerID)
+if err != nil {
+    panic(&quot;failed to update our peers status in our kademlia table&quot;)
+}
+</code></pre>
+<p>The hash function used on top of our S/Kademlia public key for the time being can not be set, and is BLAKE-2b 256 bit.</p>
+<p>The routing table gets updated every single time your node receives a message from a peer, and upon completing a handshake.</p>
+<p>The routing table will only get updated should the number of prefixed byte differences between your nodes identity hash and an incoming peers identity hash exceed \(p_{len}\), and the sum of the prefixes bytes differences exceeds the value \(p_{min}\).</p>
+<p>By 'update', we refer to the routing table bucket (effectively a LRU cache) marking an incoming peers identity to be most recently used.</p>
+<p>By default based on experiments from the original S/Kademlia paper, each routing table bucket may hold at most 16 peer identities.</p>
+<a class="header" href="#peer-eviction-policy" id="peer-eviction-policy"><h2>Peer eviction policy</h2></a>
+<p>Should a routing table bucket be full, we formally follow the peer eviction scheme denoted in the S/Kademlia paper where
+the last peer in the bucket would be pinged. If the last peer in the bucket fails to be pinged, then they are evicted from
+the routing table, and the incoming peers identity gets put towards the front of the bucket.</p>
+<p>If the last peer in the bucket responds to our nodes ping however, the last peer gets moved the front of the bucket,
+and the incoming peer is ignored s.t. the incoming peer is disconnected from our node.</p>
+<a class="header" href="#configuring-skademlia" id="configuring-skademlia"><h2>Configuring S/Kademlia</h2></a>
+<p>While instantiating a new <code>skademlia</code> protocol block, you may customize any of S/Kademlia's security
+parameters denoted by the parameter set \( (c_1, c_2, p_{min}, p_{len}) \) like so:</p>
+<pre><code class="language-go">var node *noise.Node
+
+block := skademlia.New()
+
+// Setup S/Kademlia security parameters here.
+block.WithC1(int(16))
+block.WithC2(int(16))
+block.WithPrefixDiffLen(int(128))
+block.WithPrefixDiffMaxLen(int(32))
+
+// Additionally, have all S/Kademlia messages and future
+// messages be appended with EdDSA signatures that are
+// validated for every incoming message.
+block.WithSignatureScheme(eddsa.New())
+
+// Register the protocol block and enforce it on our node.
+protocol.New().Register(block).Enforce(node)
+</code></pre>
+<a class="header" href="#bootstrapping-new-peers" id="bootstrapping-new-peers"><h2>Bootstrapping new peers</h2></a>
+<p>In order to bootstrap your newly created node to the peers closest to you within the network, you may make use of the
+<code>FIND_NODE</code> RPC call described in Section 4.4 of S/Kademlia's paper: &quot;Lookup over disjoint paths&quot;.</p>
+<p>Given a node instance \(N\), and a S/Kademlia ID as a target \(T\), \(\alpha\) disjoint lookups
+take place in parallel over all closest peers to \(N\) to target \(T\), with at most \(d\)
+lookups happening at once.</p>
+<p>Each disjoint lookup queries at most \(\alpha\)  peers, with the RPC call returning at
+most \(B_{size}\) S/Kademlia peer IDs closest to that of a specified target \(T\) where
+\(B_{size}\) is the maximum number of IDs that may be stored within a routing table bucket.</p>
+<p>In the case of our implementation, \(B_{size}\) by default is set to 16.</p>
+<p>In amidst the disjoint lookup queries, our routing table will be populated with peers we dial/connect to; essentially
+enforcing the <code>FIND_NODE</code> RPC call to be akin to a bootstrapping mechanism for having our node connect to the peers we are closest
+to within our network.</p>
+<p>You may invoke the <code>FIND_NODE</code> RPC call after setting up your node to work with S/Kademlia like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/skademlia&quot;
+
+func main() {
+    params := noise.DefaultParams()
+    params.Keys = skademlia.RandomKeys()
+    params.Port = uint16(3000)
+    
+    node, err := noise.NewNode(params)
+    if err != nil {
+        panic(err)
+    }
+    
+    protocol.New().
+        Register(skademlia.New()).
+        Enforce(node)
+    
+    go node.Listen()
+    
+    // Attempt to dial a peer located at the address
+    // 127.0.0.1:3001.
+    peer, err := node.Dial(&quot;127.0.0.1:3001&quot;)
+    if err != nil {
+        panic(&quot;failed to connect to the peer we wanted to connect to&quot;)
+    }
+    
+    // Block the current goroutine until we finish
+    // performing a S/Kademlia handshake with our peer.
+    skademlia.WaitUntilAuthenticated(peer)
+    
+    // Lookup the 16 (skademlia.BucketSize()) closest peers to our
+    // node ID throughout the network with at most 8 disjoint lookups
+    // happening at once.
+    //
+    // Calling this method automatically populates our routing table
+    // and thus immediately bootstraps us/dials us to the peers closest to us
+    // within the network.
+    peers := skademlia.FindNode(node,
+        protocol.NodeID(node).(skademlia.ID), skademlia.BucketSize(), 8)
+    
+    // Print the 16 closest peers to us we have found via the `FIND_NODE`
+    // RPC call.
+    fmt.Printf(&quot;Bootstrapped with peers: %+v\n&quot;, peers)
+    
+    // Print the peers we currently are routed/connected to.
+    fmt.Printf(&quot;Peers we are connected to: %+v\n&quot;, table.GetPeers())
+}
+</code></pre>
+<p>As denoted in the code example above, a helpful function which you may use to block
+a particular goroutine until an incoming peer has successfully completed a S/Kademlia handshake is
+<code>skademlia.WaitUntilAuthenticated(*noise.Peer)</code>.</p>
+<a class="header" href="#broadcasting-messages-to-peers" id="broadcasting-messages-to-peers"><h2>Broadcasting messages to peers</h2></a>
+<p>After bootstrapping to the closest peers to us within the network, we may make use of
+some methods S/Kademlia provides to reliably broadcast to the peers we are routed to.</p>
+<p>There exists a <code>skademlia.Broadcast(*noise.Node, noise.Message) []error</code> method which broadcasts
+to at most 16 of the closest peers to us in parallel a Noise-registered message we specify.</p>
+<p>Should we choose to not care about broadcasting errors and simply fire-and-forget a Noise-registered
+message we wish to broadcast, we may make use of the <code>skademlia.BroadcastAsync(*noise.Node, noise.Message)</code> function.</p>
+<p>The <code>chat</code> example in Noise calls <code>BroadcastAsync</code> to broadcast a chat message to peers closest to us like so:</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise/payload&quot;
+
+var _ noise.Message = (*chatMessage)(nil)
+
+type chatMessage struct {
+    text string
+}
+
+func (m *chatMessage) Read(reader payload.Reader) (noise.Message, error) {
+    var err error
+    
+    m.text, err = reader.ReadString()
+    if err != nil { return nil, err}
+    
+    return m, nil
+}
+
+func (m *chatMessage) Write() []byte {
+    return payload.NewWriter(nil).WriteString(m.text).Bytes()
+}
+
+func main() {
+    noise.RegisterMessage(noise.NextAvailableOpcode(), (*chatMessage)(nil))
+    
+    var node *noise.Node
+    
+    // ... setup node, dial a peer, and perform `FIND_NODE` here.
+    
+    reader := bufio.NewReader(os.Stdin)
+    
+    for {
+        txt, err := reader.ReadString('\n')
+    
+        if err != nil {
+            panic(err)
+        }
+    
+        // Synchronous broadcast.
+        errs := skademlia.Broadcast(node, chatMessage{text: strings.TrimSpace(txt)})
+        
+        if len(errs) &gt; 0 {
+            fmt.Println(&quot;Got errors broadcasting our chat message to peers:&quot;, errs)
+        }
+        
+        // Asynchronous broadcast.
+        // skademlia.BroadcastAsync(node, chatMessage{text: strings.TrimSpace(txt)})
+    }
+}
+</code></pre>
+<a class="header" href="#callbacks" id="callbacks"><h1>Callbacks</h1></a>
+<p><strong>noise</strong> comes with a lot of node/peer events that may be intercepted through the provision of a callback function.</p>
+<p>As a result, noise provides a flexible, asynchronous callback manager that allows for a linearly ordered set of
+callback functions to operate/be invoked when a particular event occurs within the <code>callbacks</code> package.</p>
+<pre><code class="language-go">import &quot;github.com/perlin-network/noise&quot;
+import &quot;github.com/perlin-network/noise/callbacks&quot;
+import &quot;fmt&quot;
+
+func main() {
+    var node *noise.Node 
+    
+    // ... setup node here
+    
+    node.OnPeerDialed(func(node *noise.Node, peer *noise.Peer) error {
+        fmt.Println(&quot;This callback will only get called on the very first peer dialed!&quot;)
+        
+        return callbacks.Deregister
+    })
+
+    _, _ = node.Dial(&quot;some peer address here&quot;)
+    
+    select {}
+}
+</code></pre>
+<p>One particularly interesting capability of noise's callback managers is that in amidst a callback function, a <code>callbacks.Deregister</code> error
+may be returned from within the callback to deregister the callback function after it is invoked once/multiple times on some data/event.</p>
+<blockquote>
+<p><strong>Note:</strong> Callback functions are not independently executed in their own separate goroutines! Be aware that invoking any blocking operation such as an infinite loop within any callback function will potentially deadlock Noise.</p>
+</blockquote>
+<a class="header" href="#callback-function-signatures" id="callback-function-signatures"><h2>Callback function signatures</h2></a>
+<pre><code class="language-go">package noise
+
+import &quot;github.com/perlin-network/noise/payload&quot;
+
+type OnErrorCallback func(node *Node, err error) error
+type OnPeerErrorCallback func(node *Node, peer *Peer, err error) error
+type OnPeerDisconnectCallback func(node *Node, peer *Peer) error
+type OnPeerInitCallback func(node *Node, peer *Peer) error
+
+type BeforeMessageSentCallback func(node *Node, peer *Peer, msg []byte) ([]byte, error)
+type BeforeMessageReceivedCallback func(node *Node, peer *Peer, msg []byte) ([]byte, error)
+
+type AfterMessageSentCallback func(node *Node, peer *Peer) error
+type AfterMessageReceivedCallback func(node *Node, peer *Peer) error
+
+type AfterMessageEncodedCallback func(node *Node, peer *Peer, header, msg []byte) ([]byte, error)
+
+type OnPeerDecodeHeaderCallback func(node *Node, peer *Peer, reader payload.Reader) error
+type OnPeerDecodeFooterCallback func(node *Node, peer *Peer, msg []byte, reader payload.Reader) error
+
+type OnMessageReceivedCallback func(node *Node, opcode Opcode, peer *Peer, message Message) error
+</code></pre>
+<a class="header" href="#interceptable-node-events" id="interceptable-node-events"><h2>Interceptable node events</h2></a>
+<pre><code class="language-go">// OnListenerError registers a callback for whenever our nodes listener
+// fails to accept an incoming peer.
+func (n *Node) OnListenerError(c OnErrorCallback) { ... }
+
+// OnPeerConnected registers a callback for whenever a peer has successfully
+// been accepted by our node.
+func (n *Node) OnPeerConnected(c OnPeerInitCallback) { ... }
+
+// OnPeerDialed registers a callback for whenever a peer has been successfully dialed.
+func (n *Node) OnPeerDialed(c OnPeerInitCallback) { ... }
+
+// OnPeerDisconnected registers a callback whenever a peer has been disconnected.
+func (n *Node) OnPeerDisconnected(srcCallbacks ...OnPeerDisconnectCallback) { ... }
+
+// OnPeerInit registers a callback for whenever a peer has either been successfully
+// dialed, or otherwise accepted by our node.
+//
+// In essence a helper function that registers callbacks for both `OnPeerConnected`
+// and `OnPeerDialed` at once.
+func (n *Node) OnPeerInit(srcCallbacks ...OnPeerInitCallback) { ... }
+</code></pre>
+<a class="header" href="#interceptable-peer-events" id="interceptable-peer-events"><h2>Interceptable peer events</h2></a>
+<pre><code class="language-go">// BeforeMessageSent registers a callback to be called before a message
+// is sent to a specified peer.
+func (p *Peer) BeforeMessageSent(c BeforeMessageSentCallback) { ... }
+
+// BeforeMessageReceived registers a callback to be called before a message
+// is to be received from a specified peer.
+func (p *Peer) BeforeMessageReceived(c BeforeMessageReceivedCallback) { ... }
+
+// AfterMessageSent registers a callback to be called after a message
+// is sent to a specified peer.
+func (p *Peer) AfterMessageSent(c AfterMessageSentCallback) { ... }
+
+// AfterMessageReceived registers a callback to be called after a message
+// is to be received from a specified peer.
+func (p *Peer) AfterMessageReceived(c AfterMessageReceivedCallback) { ... }
+
+// OnDecodeHeader registers a callback that is fed in the contents of the
+// header portion of an incoming message from a specified peer.
+func (p *Peer) OnDecodeHeader(c OnPeerDecodeHeaderCallback) { ... }
+
+// OnDecodeFooter registers a callback that is fed in the contents of the
+// footer portion of an incoming message from a specified peer.
+func (p *Peer) OnDecodeFooter(c OnPeerDecodeFooterCallback) { ... }
+
+// OnEncodeHeader registers a callback that is fed in the raw contents of
+// a message to be sent, which then outputs bytes that are to be appended
+// to the header of an outgoing message.
+func (p *Peer) OnEncodeHeader(c AfterMessageEncodedCallback) { ... }
+
+// OnEncodeFooter registers a callback that is fed in the raw contents of
+// a message to be sent, which then outputs bytes that are to be appended
+// to the footer of an outgoing message.
+func (p *Peer) OnEncodeFooter(c AfterMessageEncodedCallback) { ... }
+
+// OnConnError registers a callback for whenever something goes wrong with the
+// connection to our peer.
+func (p *Peer) OnConnError(c OnPeerErrorCallback) { ... }
+
+// OnDisconnect registers a callback for whenever the peer disconnects.
+func (p *Peer) OnDisconnect(srcCallbacks ...OnPeerDisconnectCallback) { ... }
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+        
+        
+
+    </body>
+</html>
