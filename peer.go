@@ -14,6 +14,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+	"fmt"
 )
 
 type receiveHandle struct {
@@ -588,12 +589,20 @@ func (p *Peer) LocalPort() uint16 {
 	return p.node.transport.Port(p.conn.LocalAddr())
 }
 
+func (p *Peer) LocalAddress() string {
+	return fmt.Sprintf("%s:%d", p.LocalIP(), p.LocalPort())
+}
+
 func (p *Peer) RemoteIP() net.IP {
 	return p.node.transport.IP(p.conn.RemoteAddr())
 }
 
 func (p *Peer) RemotePort() uint16 {
 	return p.node.transport.Port(p.conn.RemoteAddr())
+}
+
+func (p *Peer) RemoteAddress() string {
+	return fmt.Sprintf("%s:%d", p.RemoteIP(), p.RemotePort())
 }
 
 // Set sets a metadata entry given a key-value pair on our node.
