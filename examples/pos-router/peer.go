@@ -18,13 +18,15 @@ type NearbyPeer struct {
 	Address		string  //ip:port/hash
 	PublicKey	[]byte
 	Sign		[]byte
-	Ts		uint64
+	Ts		int64
+	index		int
 }
 
 type RemotePeer struct {
 	PublicKey	[]byte
 	Sign		[]byte
-	Ts		uint64
+	Ts		int64
+	index		int
 }
 
 type PeerInfo struct {
@@ -35,26 +37,25 @@ type PeerInfo struct {
 	ID	string
 }
 
-//func (np NearbyPeer) NewNearbyPeer(Address string, PublicKey []byte, sign []byte) (*NearbyPeer, error) {
-func NewNearbyPeer(Address string, PublicKey []byte, sign []byte, ts uint64) (*NearbyPeer, error) {
+func NewNearbyPeer(Address string, PublicKey []byte, sign []byte, ts int64) (*NearbyPeer, error) {
 	return &NearbyPeer{
 		Address:	Address,
 		PublicKey:	PublicKey,
 		Sign:		sign,
 		Ts:		ts,
+		index:		-1,
 	}, nil
 }
 
-//func (rp RemotePeer) NewRemotePeer(PublicKey byte[], Sign []byte) (*RemotePeer, error) {
-func NewRemotePeer(PublicKey []byte, Sign []byte, ts uint64) (*RemotePeer, error) {
+func NewRemotePeer(PublicKey []byte, Sign []byte, ts int64) (*RemotePeer, error) {
 	return &RemotePeer{
 		PublicKey:	PublicKey,
 		Sign:		Sign,
 		Ts:		ts,
+		index:		-1,
 	}, nil
 }
 
-//func NewPeerInfo(ID string, NP []*NearbyPeer, RP []*RemotePeer) (*PeerInfo, error) {
 func NewPeerInfo(ID string, NP NPeerHeap, RP RPeerHeap) (*PeerInfo, error) {
 	return &PeerInfo{
 		ID: ID,

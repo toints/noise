@@ -50,7 +50,7 @@ func genPeersData(node *noise.Node) ([]byte, error){
 	var npList NPeerHeap
 	var rpList RPeerHeap
 
-	npeers := skademlia.FindNode(node, protocol.NodeID(node).(skademlia.ID), skademlia.BucketSize(), 8)
+	npeers := skademlia.FindNode(node, protocol.NodeID(node).(skademlia.ID), skademlia.BucketSize(), 1)
 	//log.Info().Msgf("Bootstrapped with peers: %+v", npeers)
 	rpeers := skademlia.FindNode(node, protocol.NodeID(node).(skademlia.ID), skademlia.BucketSize(), 8)
 	//log.Info().Msgf("Bootstrapped with peers: %+v", rpeers)
@@ -58,7 +58,8 @@ func genPeersData(node *noise.Node) ([]byte, error){
 	for k, v := range npeers {
 		log.Info().Msgf("**** id:%v --> address:%s, publicKey:%x", k , v.Address(), v.PublicKey()[:])
 		scheme := eddsa.New()
-		now := fmt.Sprintf("%d:%x", time.Now().Unix(), v.PublicKey()[:])
+		ts := time.Now().Unix()
+		now := fmt.Sprintf("%d:%x", ts, v.PublicKey()[:])
 		log.Info().Msgf("**** time now and publicKey:%s", now)
 
 		sign, err := scheme.Sign(node.Keys.PrivateKey(), []byte(now))
@@ -67,14 +68,16 @@ func genPeersData(node *noise.Node) ([]byte, error){
 		}
 
 		log.Info().Msgf("**** sign:%x", string(sign[:]))
-		np, _ := NewNearbyPeer(v.Address(), v.PublicKey(), sign)
-		npList = append(npList, np)
+		np, _ := NewNearbyPeer(v.Address(), v.PublicKey(), sign, ts)
+		//npList = append(npList, np)
+		npList.Push(np)
 	}
 
 	for k, v := range rpeers {
 		log.Info().Msgf("#### id:%v --> address:%s, publicKey:%x", k , v.Address(), v.PublicKey()[:])
 		scheme := eddsa.New()
-		now := fmt.Sprintf("%d:%x", time.Now().Unix(), v.PublicKey()[:])
+		ts := time.Now().Unix()
+		now := fmt.Sprintf("%d:%x", ts, v.PublicKey()[:]) //FIXME: only ts
 		log.Info().Msgf("#### time now and publicKey:%s", now)
 
 		sign, err := scheme.Sign(node.Keys.PrivateKey(), []byte(now))
@@ -83,8 +86,9 @@ func genPeersData(node *noise.Node) ([]byte, error){
 		}
 
 		log.Info().Msgf("#### sign:%x", string(sign[:]))
-		rp, _ := NewRemotePeer(v.PublicKey(), sign)
-		rpList = append(rpList, rp)
+		rp, _ := NewRemotePeer(v.PublicKey(), sign, ts)
+		//rpList = append(rpList, rp)
+		rpList.Push(rp)
 	}
 
 	pid := fmt.Sprintf("%x", node.Keys.PublicKey()[:])
@@ -121,6 +125,8 @@ func setup(node *noise.Node) {
 			for {
 				msg := <-peer.Receive(opcodeChat)
 				log.Info().Msgf("[%s]: %s", protocol.PeerID(peer), msg.(chatMessage).text)
+				//TODO:
+				//npList and rpList receive, verify peer data by publicKey, and then update the npList and rpList info
 			}
 		}()
 

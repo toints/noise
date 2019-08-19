@@ -1,8 +1,8 @@
-packager main
+package main
 
 import (
 	"container/heap"
-	"fmt"
+//	"fmt"
 )
 
 type NPeerHeap []*NearbyPeer
@@ -12,14 +12,14 @@ func (nh NPeerHeap) Len() int {
 	return len(nh)
 }
 
-func (nh NPeerHeap) Less(i, j uint64) bool {
+func (nh NPeerHeap) Less(i, j int) bool {
 	return nh[i].Ts < nh[j].Ts
 }
 
 func (nh NPeerHeap) Swap(i, j int) {
 	nh[i], nh[j] = nh[j], nh[i]
 	nh[i].index = i
-	nh[h].index = j
+	nh[j].index = j
 }
 
 func (nh *NPeerHeap) Push(x interface{}) {
@@ -38,7 +38,7 @@ func (nh *NPeerHeap) Pop() interface{} {
 	return item
 }
 
-func (nh *NPeerHeap) update(item *NearbyPeer, addr string, pkey []byte, sign []byte, ts uint64) {
+func (nh *NPeerHeap) update(item *NearbyPeer, addr string, pkey []byte, sign []byte, ts int64) {
 	item.Address = addr
 	item.PublicKey = pkey
 	item.Sign = sign
@@ -51,14 +51,14 @@ func (rh RPeerHeap) Len() int {
 	return len(rh)
 }
 
-func (rh RPeerHeap) Less(i, j uint64) bool {
+func (rh RPeerHeap) Less(i, j int) bool {
 	return rh[i].Ts < rh[j].Ts
 }
 
 func (rh RPeerHeap) Swap(i, j int) {
 	rh[i], rh[j] = rh[j], rh[i]
 	rh[i].index = i
-	rh[h].index = j
+	rh[j].index = j
 }
 
 func (rh *RPeerHeap) Push(x interface{}) {
@@ -77,7 +77,7 @@ func (rh *RPeerHeap) Pop() interface{} {
 	return item
 }
 
-func (rh *RPeerHeap) update(item *RemotePeer, pkey []byte, sign []byte, ts uint64) {
+func (rh *RPeerHeap) update(item *RemotePeer, pkey []byte, sign []byte, ts int64) {
 	item.PublicKey = pkey
 	item.Sign = sign
 	item.Ts = ts
