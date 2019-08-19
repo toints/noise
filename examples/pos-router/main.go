@@ -77,7 +77,7 @@ func genPeersData(node *noise.Node) ([]byte, error){
 		log.Info().Msgf("#### id:%v --> address:%s, publicKey:%x", k , v.Address(), v.PublicKey()[:])
 		scheme := eddsa.New()
 		ts := time.Now().Unix()
-		now := fmt.Sprintf("%d:%x", ts, v.PublicKey()[:]) //FIXME: only ts
+		now := fmt.Sprintf("%d:%x", ts, v.PublicKey()[:])
 		log.Info().Msgf("#### time now and publicKey:%s", now)
 
 		sign, err := scheme.Sign(node.Keys.PrivateKey(), []byte(now))
@@ -100,6 +100,12 @@ func genPeersData(node *noise.Node) ([]byte, error){
 	//log.Info().Msgf("json peer info:%s", jsonPeerInfo)
 	/************ add peers info end **************/
 	return jsonPeerInfo, nil
+}
+
+func UpdatePeersData(node *noise.Node) error {
+//TODO:
+// update peer heap
+	return nil
 }
 
 /** ENTRY POINT **/
